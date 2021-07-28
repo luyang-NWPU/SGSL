@@ -1,0 +1,2294 @@
+[06/16 10:33:03] fastreid INFO: Rank of current process: 0. World size: 1
+[06/16 10:33:13] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/16 10:33:13] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/16 10:33:13] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/16 10:33:13] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/16 10:33:13] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/16 10:33:13] fastreid.utils.env INFO: Using a generated random seed 13204589
+[06/16 10:33:13] fastreid.dml_dataset INFO: Prepare training set
+[06/16 10:33:13] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/16 10:33:13] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/16 10:33:13] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/16 10:33:14] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/16 10:33:19] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/16 10:33:19] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/16 10:34:08] fastreid.utils.events INFO:  eta: 1:11:55  epoch/iter: 0/90  total_loss: 4.275  time: 0.5086  data_time: 0.0083  lr: 9.05e-03  max_mem: 4873M
+[06/16 10:34:52] fastreid.utils.events INFO:  eta: 1:11:42  epoch/iter: 1/181  total_loss: 3.901  time: 0.4961  data_time: 0.0005  lr: 1.31e-02  max_mem: 4873M
+[06/16 10:35:01] fastreid.utils.events INFO:  eta: 1:11:36  epoch/iter: 2/199  total_loss: 3.86  time: 0.4952  data_time: 0.0004  lr: 1.40e-02  max_mem: 4873M
+[06/16 10:35:36] fastreid.utils.events INFO:  eta: 1:11:14  epoch/iter: 2/272  total_loss: 3.498  time: 0.4930  data_time: 0.0005  lr: 1.72e-02  max_mem: 4873M
+[06/16 10:36:21] fastreid.utils.events INFO:  eta: 1:10:43  epoch/iter: 3/363  total_loss: 3.312  time: 0.4918  data_time: 0.0005  lr: 2.13e-02  max_mem: 4873M
+[06/16 10:36:39] fastreid.utils.events INFO:  eta: 1:10:31  epoch/iter: 4/399  total_loss: 3.257  time: 0.4917  data_time: 0.0003  lr: 2.30e-02  max_mem: 4874M
+[06/16 10:37:06] fastreid.utils.events INFO:  eta: 1:10:07  epoch/iter: 4/454  total_loss: 3.206  time: 0.4915  data_time: 0.0005  lr: 2.54e-02  max_mem: 4874M
+[06/16 10:37:50] fastreid.utils.events INFO:  eta: 1:09:27  epoch/iter: 5/545  total_loss: 3.154  time: 0.4915  data_time: 0.0005  lr: 2.95e-02  max_mem: 4875M
+[06/16 10:38:17] fastreid.utils.events INFO:  eta: 1:09:04  epoch/iter: 6/599  total_loss: 3.133  time: 0.4914  data_time: 0.0004  lr: 3.20e-02  max_mem: 4875M
+[06/16 10:38:35] fastreid.utils.events INFO:  eta: 1:08:46  epoch/iter: 6/636  total_loss: 3.123  time: 0.4914  data_time: 0.0005  lr: 3.36e-02  max_mem: 4875M
+[06/16 10:39:20] fastreid.utils.events INFO:  eta: 1:08:06  epoch/iter: 7/727  total_loss: 3.108  time: 0.4915  data_time: 0.0004  lr: 3.77e-02  max_mem: 4875M
+[06/16 10:39:55] fastreid.utils.events INFO:  eta: 1:07:33  epoch/iter: 8/799  total_loss: 3.122  time: 0.4917  data_time: 0.0005  lr: 4.10e-02  max_mem: 4875M
+[06/16 10:40:05] fastreid.utils.events INFO:  eta: 1:07:25  epoch/iter: 8/818  total_loss: 3.113  time: 0.4917  data_time: 0.0007  lr: 4.18e-02  max_mem: 4875M
+[06/16 10:40:50] fastreid.utils.events INFO:  eta: 1:06:42  epoch/iter: 9/909  total_loss: 3.151  time: 0.4919  data_time: 0.0005  lr: 4.59e-02  max_mem: 4875M
+[06/16 10:41:35] fastreid.utils.events INFO:  eta: 1:06:01  epoch/iter: 10/999  total_loss: 3.511  time: 0.4923  data_time: 0.0004  lr: 5.00e-02  max_mem: 4875M
+[06/16 10:41:35] fastreid.utils.events INFO:  eta: 1:06:01  epoch/iter: 10/1000  total_loss: 3.511  time: 0.4923  data_time: 0.0004  lr: 5.00e-02  max_mem: 4875M
+[06/16 10:42:21] fastreid.utils.events INFO:  eta: 1:05:21  epoch/iter: 11/1091  total_loss: 3.53  time: 0.4928  data_time: 0.0008  lr: 5.00e-02  max_mem: 4875M
+[06/16 10:43:06] fastreid.utils.events INFO:  eta: 1:04:44  epoch/iter: 12/1182  total_loss: 3.533  time: 0.4932  data_time: 0.0005  lr: 4.99e-02  max_mem: 4875M
+[06/16 10:43:14] fastreid.utils.events INFO:  eta: 1:04:37  epoch/iter: 13/1199  total_loss: 3.531  time: 0.4933  data_time: 0.0005  lr: 4.99e-02  max_mem: 4875M
+[06/16 10:43:51] fastreid.utils.events INFO:  eta: 1:04:06  epoch/iter: 13/1273  total_loss: 3.524  time: 0.4937  data_time: 0.0004  lr: 4.99e-02  max_mem: 4875M
+[06/16 10:44:37] fastreid.utils.events INFO:  eta: 1:03:28  epoch/iter: 14/1364  total_loss: 3.511  time: 0.4940  data_time: 0.0009  lr: 4.98e-02  max_mem: 4875M
+[06/16 10:44:54] fastreid.utils.events INFO:  eta: 1:03:12  epoch/iter: 15/1399  total_loss: 3.51  time: 0.4941  data_time: 0.0005  lr: 4.96e-02  max_mem: 4875M
+[06/16 10:45:22] fastreid.utils.events INFO:  eta: 1:02:48  epoch/iter: 15/1455  total_loss: 3.503  time: 0.4943  data_time: 0.0004  lr: 4.96e-02  max_mem: 4875M
+[06/16 10:46:08] fastreid.utils.events INFO:  eta: 1:02:08  epoch/iter: 16/1546  total_loss: 3.487  time: 0.4946  data_time: 0.0005  lr: 4.94e-02  max_mem: 4875M
+[06/16 10:46:35] fastreid.utils.events INFO:  eta: 1:01:46  epoch/iter: 17/1599  total_loss: 3.482  time: 0.4949  data_time: 0.0006  lr: 4.92e-02  max_mem: 4875M
+[06/16 10:46:54] fastreid.utils.events INFO:  eta: 1:01:28  epoch/iter: 17/1637  total_loss: 3.476  time: 0.4950  data_time: 0.0004  lr: 4.92e-02  max_mem: 4875M
+[06/16 10:47:40] fastreid.utils.events INFO:  eta: 1:00:47  epoch/iter: 18/1728  total_loss: 3.46  time: 0.4953  data_time: 0.0004  lr: 4.90e-02  max_mem: 4875M
+[06/16 10:48:15] fastreid.utils.events INFO:  eta: 1:00:14  epoch/iter: 19/1799  total_loss: 3.45  time: 0.4955  data_time: 0.0005  lr: 4.88e-02  max_mem: 4875M
+[06/16 10:48:25] fastreid.utils.events INFO:  eta: 1:00:06  epoch/iter: 19/1819  total_loss: 3.441  time: 0.4955  data_time: 0.0007  lr: 4.88e-02  max_mem: 4875M
+[06/16 10:49:11] fastreid.utils.events INFO:  eta: 0:59:23  epoch/iter: 20/1910  total_loss: 3.434  time: 0.4957  data_time: 0.0004  lr: 4.85e-02  max_mem: 4875M
+[06/16 10:49:55] fastreid.utils.events INFO:  eta: 0:58:42  epoch/iter: 21/1999  total_loss: 3.421  time: 0.4959  data_time: 0.0004  lr: 4.82e-02  max_mem: 4875M
+[06/16 10:49:56] fastreid.utils.events INFO:  eta: 0:58:41  epoch/iter: 21/2001  total_loss: 3.421  time: 0.4959  data_time: 0.0004  lr: 4.82e-02  max_mem: 4875M
+[06/16 10:50:42] fastreid.utils.events INFO:  eta: 0:57:57  epoch/iter: 22/2092  total_loss: 3.41  time: 0.4961  data_time: 0.0005  lr: 4.78e-02  max_mem: 4875M
+[06/16 10:51:27] fastreid.utils.events INFO:  eta: 0:57:12  epoch/iter: 23/2183  total_loss: 3.397  time: 0.4962  data_time: 0.0004  lr: 4.74e-02  max_mem: 4875M
+[06/16 10:51:35] fastreid.utils.events INFO:  eta: 0:57:04  epoch/iter: 24/2199  total_loss: 3.396  time: 0.4963  data_time: 0.0005  lr: 4.70e-02  max_mem: 4876M
+[06/16 10:52:13] fastreid.engine.defaults INFO: Prepare testing set
+[06/16 10:52:13] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 100     | 5924       | 1           |
+| gallery  | 0       | 0          | 0           |[0m
+[06/16 10:52:13] fastreid.evaluation.evaluator INFO: Start inference on 5924 images
+[06/16 10:52:16] fastreid.evaluation.evaluator INFO: Inference done 11/93. 0.1414 s / batch. ETA=0:00:16
+[06/16 10:52:33] fastreid.evaluation.evaluator INFO: Total inference time: 0:00:18.162225 (0.206389 s / batch per device, on 1 devices)
+[06/16 10:52:33] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:00:12 (0.138917 s / batch per device, on 1 devices)
+[06/16 10:52:34] fastreid.engine.defaults INFO: Evaluation results for CUB in csv format:
+[06/16 10:52:34] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@2   | Recall@4   | Recall@8   | Recall@16   | Recall@32   | metric   |
+|:----------|:-----------|:-----------|:-----------|:-----------|:------------|:------------|:---------|
+| CUB       | 74.00      | 82.44      | 89.23      | 93.55      | 96.44       | 97.77       | 74.00    |[0m
+[06/16 10:52:34] fastreid.utils.events INFO:  eta: 0:56:26  epoch/iter: 24/2274  total_loss: 3.39  time: 0.4963  data_time: 0.0005  lr: 4.70e-02  max_mem: 4876M
+[06/16 10:53:19] fastreid.utils.events INFO:  eta: 0:55:39  epoch/iter: 25/2365  total_loss: 3.38  time: 0.4963  data_time: 0.0005  lr: 4.66e-02  max_mem: 4876M
+[06/16 10:53:36] fastreid.utils.events INFO:  eta: 0:55:22  epoch/iter: 26/2399  total_loss: 3.381  time: 0.4964  data_time: 0.0005  lr: 4.62e-02  max_mem: 4876M
+[06/16 10:54:05] fastreid.utils.events INFO:  eta: 0:54:55  epoch/iter: 26/2456  total_loss: 3.376  time: 0.4965  data_time: 0.0004  lr: 4.62e-02  max_mem: 4876M
+[06/16 10:54:51] fastreid.utils.events INFO:  eta: 0:54:10  epoch/iter: 27/2547  total_loss: 3.37  time: 0.4966  data_time: 0.0008  lr: 4.57e-02  max_mem: 4876M
+[06/16 10:55:17] fastreid.utils.events INFO:  eta: 0:53:44  epoch/iter: 28/2599  total_loss: 3.367  time: 0.4968  data_time: 0.0006  lr: 4.52e-02  max_mem: 4876M
+[06/16 10:55:36] fastreid.utils.events INFO:  eta: 0:53:25  epoch/iter: 28/2638  total_loss: 3.364  time: 0.4968  data_time: 0.0005  lr: 4.52e-02  max_mem: 4876M
+[06/16 10:56:22] fastreid.utils.events INFO:  eta: 0:52:41  epoch/iter: 29/2729  total_loss: 3.354  time: 0.4970  data_time: 0.0005  lr: 4.46e-02  max_mem: 4876M
+[06/16 10:56:58] fastreid.utils.events INFO:  eta: 0:52:06  epoch/iter: 30/2799  total_loss: 3.339  time: 0.4970  data_time: 0.0005  lr: 4.41e-02  max_mem: 4876M
+[06/16 10:57:09] fastreid.utils.events INFO:  eta: 0:51:55  epoch/iter: 30/2820  total_loss: 3.339  time: 0.4970  data_time: 0.0005  lr: 4.41e-02  max_mem: 4876M
+[06/16 10:57:54] fastreid.utils.events INFO:  eta: 0:51:10  epoch/iter: 31/2911  total_loss: 3.339  time: 0.4971  data_time: 0.0006  lr: 4.35e-02  max_mem: 4876M
+[06/16 10:58:38] fastreid.utils.events INFO:  eta: 0:50:26  epoch/iter: 32/2999  total_loss: 3.341  time: 0.4973  data_time: 0.0005  lr: 4.29e-02  max_mem: 4876M
+[06/16 10:58:40] fastreid.utils.events INFO:  eta: 0:50:25  epoch/iter: 32/3002  total_loss: 3.34  time: 0.4973  data_time: 0.0005  lr: 4.29e-02  max_mem: 4876M
+[06/16 10:59:26] fastreid.utils.events INFO:  eta: 0:49:40  epoch/iter: 33/3093  total_loss: 3.335  time: 0.4974  data_time: 0.0004  lr: 4.23e-02  max_mem: 4876M
+[06/16 11:00:11] fastreid.utils.events INFO:  eta: 0:48:55  epoch/iter: 34/3184  total_loss: 3.336  time: 0.4975  data_time: 0.0004  lr: 4.16e-02  max_mem: 4876M
+[06/16 11:00:19] fastreid.utils.events INFO:  eta: 0:48:48  epoch/iter: 35/3199  total_loss: 3.335  time: 0.4976  data_time: 0.0005  lr: 4.10e-02  max_mem: 4876M
+[06/16 11:00:57] fastreid.utils.events INFO:  eta: 0:48:12  epoch/iter: 35/3275  total_loss: 3.333  time: 0.4977  data_time: 0.0005  lr: 4.10e-02  max_mem: 4876M
+[06/16 11:01:43] fastreid.utils.events INFO:  eta: 0:47:29  epoch/iter: 36/3366  total_loss: 3.327  time: 0.4978  data_time: 0.0005  lr: 4.03e-02  max_mem: 4876M
+[06/16 11:01:59] fastreid.utils.events INFO:  eta: 0:47:13  epoch/iter: 37/3399  total_loss: 3.321  time: 0.4978  data_time: 0.0006  lr: 3.96e-02  max_mem: 4876M
+[06/16 11:02:28] fastreid.utils.events INFO:  eta: 0:46:43  epoch/iter: 37/3457  total_loss: 3.323  time: 0.4978  data_time: 0.0005  lr: 3.96e-02  max_mem: 4876M
+[06/16 11:03:14] fastreid.utils.events INFO:  eta: 0:45:58  epoch/iter: 38/3548  total_loss: 3.32  time: 0.4979  data_time: 0.0005  lr: 3.89e-02  max_mem: 4876M
+[06/16 11:03:39] fastreid.utils.events INFO:  eta: 0:45:32  epoch/iter: 39/3599  total_loss: 3.316  time: 0.4979  data_time: 0.0005  lr: 3.81e-02  max_mem: 4876M
+[06/16 11:03:59] fastreid.utils.events INFO:  eta: 0:45:12  epoch/iter: 39/3639  total_loss: 3.314  time: 0.4979  data_time: 0.0004  lr: 3.81e-02  max_mem: 4876M
+[06/16 11:04:45] fastreid.utils.events INFO:  eta: 0:44:26  epoch/iter: 40/3730  total_loss: 3.297  time: 0.4980  data_time: 0.0004  lr: 3.74e-02  max_mem: 4876M
+[06/16 11:05:20] fastreid.utils.events INFO:  eta: 0:43:52  epoch/iter: 41/3799  total_loss: 3.298  time: 0.4980  data_time: 0.0005  lr: 3.66e-02  max_mem: 4876M
+[06/16 11:05:31] fastreid.utils.events INFO:  eta: 0:43:41  epoch/iter: 41/3821  total_loss: 3.3  time: 0.4981  data_time: 0.0005  lr: 3.66e-02  max_mem: 4876M
+[06/16 11:06:16] fastreid.utils.events INFO:  eta: 0:42:56  epoch/iter: 42/3912  total_loss: 3.302  time: 0.4981  data_time: 0.0005  lr: 3.58e-02  max_mem: 4876M
+[06/16 11:07:00] fastreid.utils.events INFO:  eta: 0:42:14  epoch/iter: 43/3999  total_loss: 3.293  time: 0.4982  data_time: 0.0005  lr: 3.50e-02  max_mem: 4876M
+[06/16 11:07:03] fastreid.utils.events INFO:  eta: 0:42:12  epoch/iter: 43/4003  total_loss: 3.293  time: 0.4982  data_time: 0.0006  lr: 3.50e-02  max_mem: 4876M
+[06/16 11:07:48] fastreid.utils.events INFO:  eta: 0:41:25  epoch/iter: 44/4094  total_loss: 3.285  time: 0.4982  data_time: 0.0006  lr: 3.42e-02  max_mem: 4876M
+[06/16 11:08:34] fastreid.utils.events INFO:  eta: 0:40:40  epoch/iter: 45/4185  total_loss: 3.283  time: 0.4983  data_time: 0.0008  lr: 3.34e-02  max_mem: 4876M
+[06/16 11:08:41] fastreid.utils.events INFO:  eta: 0:40:33  epoch/iter: 46/4199  total_loss: 3.284  time: 0.4983  data_time: 0.0006  lr: 3.26e-02  max_mem: 4876M
+[06/16 11:09:20] fastreid.utils.events INFO:  eta: 0:39:54  epoch/iter: 46/4276  total_loss: 3.286  time: 0.4983  data_time: 0.0006  lr: 3.26e-02  max_mem: 4876M
+[06/16 11:10:05] fastreid.utils.events INFO:  eta: 0:39:08  epoch/iter: 47/4367  total_loss: 3.284  time: 0.4984  data_time: 0.0008  lr: 3.17e-02  max_mem: 4876M
+[06/16 11:10:21] fastreid.utils.events INFO:  eta: 0:38:52  epoch/iter: 48/4399  total_loss: 3.281  time: 0.4984  data_time: 0.0005  lr: 3.09e-02  max_mem: 4876M
+[06/16 11:10:51] fastreid.utils.events INFO:  eta: 0:38:24  epoch/iter: 48/4458  total_loss: 3.279  time: 0.4984  data_time: 0.0006  lr: 3.09e-02  max_mem: 4876M
+[06/16 11:11:36] fastreid.engine.defaults INFO: Prepare testing set
+[06/16 11:11:36] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 100     | 5924       | 1           |
+| gallery  | 0       | 0          | 0           |[0m
+[06/16 11:11:36] fastreid.evaluation.evaluator INFO: Start inference on 5924 images
+[06/16 11:11:39] fastreid.evaluation.evaluator INFO: Inference done 11/93. 0.1397 s / batch. ETA=0:00:12
+[06/16 11:11:52] fastreid.evaluation.evaluator INFO: Total inference time: 0:00:13.909646 (0.158064 s / batch per device, on 1 devices)
+[06/16 11:11:52] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:00:12 (0.140738 s / batch per device, on 1 devices)
+[06/16 11:11:52] fastreid.engine.defaults INFO: Evaluation results for CUB in csv format:
+[06/16 11:11:52] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@2   | Recall@4   | Recall@8   | Recall@16   | Recall@32   | metric   |
+|:----------|:-----------|:-----------|:-----------|:-----------|:------------|:------------|:---------|
+| CUB       | 75.66      | 84.40      | 90.33      | 94.23      | 96.25       | 97.72       | 75.66    |[0m
+[06/16 11:11:52] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_cub/model_best.pth
+[06/16 11:11:52] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_cub/model_0049.pth
+[06/16 11:11:52] fastreid.utils.events INFO:  eta: 0:37:38  epoch/iter: 49/4549  total_loss: 3.276  time: 0.4984  data_time: 0.0006  lr: 3.00e-02  max_mem: 4876M
+[06/16 11:12:17] fastreid.utils.events INFO:  eta: 0:37:13  epoch/iter: 50/4599  total_loss: 3.277  time: 0.4984  data_time: 0.0004  lr: 2.92e-02  max_mem: 4876M
+[06/16 11:12:38] fastreid.utils.events INFO:  eta: 0:36:54  epoch/iter: 50/4640  total_loss: 3.274  time: 0.4984  data_time: 0.0006  lr: 2.92e-02  max_mem: 4876M
+[06/16 11:13:24] fastreid.utils.events INFO:  eta: 0:36:09  epoch/iter: 51/4731  total_loss: 3.27  time: 0.4985  data_time: 0.0007  lr: 2.83e-02  max_mem: 4876M
+[06/16 11:13:58] fastreid.utils.events INFO:  eta: 0:35:35  epoch/iter: 52/4799  total_loss: 3.268  time: 0.4985  data_time: 0.0004  lr: 2.74e-02  max_mem: 4876M
+[06/16 11:14:09] fastreid.utils.events INFO:  eta: 0:35:23  epoch/iter: 52/4822  total_loss: 3.271  time: 0.4985  data_time: 0.0006  lr: 2.74e-02  max_mem: 4876M
+[06/16 11:14:56] fastreid.utils.events INFO:  eta: 0:34:38  epoch/iter: 53/4913  total_loss: 3.264  time: 0.4985  data_time: 0.0008  lr: 2.66e-02  max_mem: 4876M
+[06/16 11:15:39] fastreid.utils.events INFO:  eta: 0:33:55  epoch/iter: 54/4999  total_loss: 3.265  time: 0.4986  data_time: 0.0007  lr: 2.57e-02  max_mem: 4876M
+[06/16 11:15:41] fastreid.utils.events INFO:  eta: 0:33:52  epoch/iter: 54/5004  total_loss: 3.264  time: 0.4986  data_time: 0.0006  lr: 2.57e-02  max_mem: 4876M
+[06/16 11:16:27] fastreid.utils.events INFO:  eta: 0:33:08  epoch/iter: 55/5095  total_loss: 3.269  time: 0.4986  data_time: 0.0005  lr: 2.48e-02  max_mem: 4876M
+[06/16 11:17:13] fastreid.utils.events INFO:  eta: 0:32:22  epoch/iter: 56/5186  total_loss: 3.259  time: 0.4987  data_time: 0.0005  lr: 2.39e-02  max_mem: 4876M
+[06/16 11:17:19] fastreid.utils.events INFO:  eta: 0:32:16  epoch/iter: 57/5199  total_loss: 3.258  time: 0.4987  data_time: 0.0004  lr: 2.31e-02  max_mem: 4876M
+[06/16 11:17:58] fastreid.utils.events INFO:  eta: 0:31:38  epoch/iter: 57/5277  total_loss: 3.255  time: 0.4987  data_time: 0.0005  lr: 2.31e-02  max_mem: 4876M
+[06/16 11:18:44] fastreid.utils.events INFO:  eta: 0:30:53  epoch/iter: 58/5368  total_loss: 3.247  time: 0.4988  data_time: 0.0005  lr: 2.22e-02  max_mem: 4876M
+[06/16 11:19:00] fastreid.utils.events INFO:  eta: 0:30:38  epoch/iter: 59/5399  total_loss: 3.246  time: 0.4988  data_time: 0.0004  lr: 2.13e-02  max_mem: 4876M
+[06/16 11:19:30] fastreid.utils.events INFO:  eta: 0:30:07  epoch/iter: 59/5459  total_loss: 3.246  time: 0.4988  data_time: 0.0004  lr: 2.13e-02  max_mem: 4876M
+[06/16 11:20:15] fastreid.utils.events INFO:  eta: 0:29:22  epoch/iter: 60/5550  total_loss: 3.249  time: 0.4988  data_time: 0.0004  lr: 2.05e-02  max_mem: 4876M
+[06/16 11:20:40] fastreid.utils.events INFO:  eta: 0:28:57  epoch/iter: 61/5599  total_loss: 3.251  time: 0.4988  data_time: 0.0004  lr: 1.96e-02  max_mem: 4876M
+[06/16 11:21:01] fastreid.utils.events INFO:  eta: 0:28:35  epoch/iter: 61/5641  total_loss: 3.252  time: 0.4988  data_time: 0.0004  lr: 1.96e-02  max_mem: 4876M
+[06/16 11:21:46] fastreid.utils.events INFO:  eta: 0:27:49  epoch/iter: 62/5732  total_loss: 3.25  time: 0.4988  data_time: 0.0005  lr: 1.88e-02  max_mem: 4876M
+[06/16 11:22:20] fastreid.utils.events INFO:  eta: 0:27:15  epoch/iter: 63/5799  total_loss: 3.242  time: 0.4988  data_time: 0.0006  lr: 1.79e-02  max_mem: 4876M
+[06/16 11:22:32] fastreid.utils.events INFO:  eta: 0:27:03  epoch/iter: 63/5823  total_loss: 3.244  time: 0.4988  data_time: 0.0004  lr: 1.79e-02  max_mem: 4876M
+[06/16 11:23:17] fastreid.utils.events INFO:  eta: 0:26:18  epoch/iter: 64/5914  total_loss: 3.242  time: 0.4988  data_time: 0.0004  lr: 1.71e-02  max_mem: 4876M
+[06/16 11:24:00] fastreid.utils.events INFO:  eta: 0:25:35  epoch/iter: 65/5999  total_loss: 3.24  time: 0.4989  data_time: 0.0006  lr: 1.63e-02  max_mem: 4876M
+[06/16 11:24:03] fastreid.utils.events INFO:  eta: 0:25:32  epoch/iter: 65/6005  total_loss: 3.239  time: 0.4988  data_time: 0.0006  lr: 1.63e-02  max_mem: 4876M
+[06/16 11:24:49] fastreid.utils.events INFO:  eta: 0:24:47  epoch/iter: 66/6096  total_loss: 3.239  time: 0.4989  data_time: 0.0004  lr: 1.55e-02  max_mem: 4876M
+[06/16 11:25:34] fastreid.utils.events INFO:  eta: 0:24:01  epoch/iter: 67/6187  total_loss: 3.241  time: 0.4989  data_time: 0.0004  lr: 1.47e-02  max_mem: 4876M
+[06/16 11:25:40] fastreid.utils.events INFO:  eta: 0:23:55  epoch/iter: 68/6199  total_loss: 3.241  time: 0.4989  data_time: 0.0004  lr: 1.39e-02  max_mem: 4876M
+[06/16 11:26:20] fastreid.utils.events INFO:  eta: 0:23:15  epoch/iter: 68/6278  total_loss: 3.237  time: 0.4989  data_time: 0.0004  lr: 1.39e-02  max_mem: 4876M
+[06/16 11:27:05] fastreid.utils.events INFO:  eta: 0:22:30  epoch/iter: 69/6369  total_loss: 3.234  time: 0.4989  data_time: 0.0004  lr: 1.31e-02  max_mem: 4876M
+[06/16 11:27:20] fastreid.utils.events INFO:  eta: 0:22:14  epoch/iter: 70/6399  total_loss: 3.234  time: 0.4989  data_time: 0.0004  lr: 1.24e-02  max_mem: 4876M
+[06/16 11:27:50] fastreid.utils.events INFO:  eta: 0:21:44  epoch/iter: 70/6460  total_loss: 3.233  time: 0.4989  data_time: 0.0004  lr: 1.24e-02  max_mem: 4876M
+[06/16 11:28:36] fastreid.utils.events INFO:  eta: 0:20:59  epoch/iter: 71/6551  total_loss: 3.23  time: 0.4989  data_time: 0.0004  lr: 1.16e-02  max_mem: 4876M
+[06/16 11:29:00] fastreid.utils.events INFO:  eta: 0:20:35  epoch/iter: 72/6599  total_loss: 3.228  time: 0.4989  data_time: 0.0006  lr: 1.09e-02  max_mem: 4876M
+[06/16 11:29:21] fastreid.utils.events INFO:  eta: 0:20:14  epoch/iter: 72/6642  total_loss: 3.227  time: 0.4989  data_time: 0.0004  lr: 1.09e-02  max_mem: 4876M
+[06/16 11:30:07] fastreid.utils.events INFO:  eta: 0:19:29  epoch/iter: 73/6733  total_loss: 3.23  time: 0.4989  data_time: 0.0004  lr: 1.02e-02  max_mem: 4876M
+[06/16 11:30:40] fastreid.utils.events INFO:  eta: 0:18:57  epoch/iter: 74/6799  total_loss: 3.231  time: 0.4989  data_time: 0.0004  lr: 9.53e-03  max_mem: 4876M
+[06/16 11:30:53] fastreid.engine.defaults INFO: Prepare testing set
+[06/16 11:30:53] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 100     | 5924       | 1           |
+| gallery  | 0       | 0          | 0           |[0m
+[06/16 11:30:53] fastreid.evaluation.evaluator INFO: Start inference on 5924 images
+[06/16 11:30:56] fastreid.evaluation.evaluator INFO: Inference done 11/93. 0.1398 s / batch. ETA=0:00:12
+[06/16 11:31:08] fastreid.evaluation.evaluator INFO: Total inference time: 0:00:13.610296 (0.154662 s / batch per device, on 1 devices)
+[06/16 11:31:08] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:00:12 (0.140366 s / batch per device, on 1 devices)
+[06/16 11:31:09] fastreid.engine.defaults INFO: Evaluation results for CUB in csv format:
+[06/16 11:31:09] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@2   | Recall@4   | Recall@8   | Recall@16   | Recall@32   | metric   |
+|:----------|:-----------|:-----------|:-----------|:-----------|:------------|:------------|:---------|
+| CUB       | 75.84      | 84.94      | 90.16      | 94.13      | 96.32       | 97.67       | 75.84    |[0m
+[06/16 11:31:09] fastreid.utils.events INFO:  eta: 0:18:44  epoch/iter: 74/6824  total_loss: 3.23  time: 0.4989  data_time: 0.0007  lr: 9.53e-03  max_mem: 4876M
+[06/16 11:31:54] fastreid.utils.events INFO:  eta: 0:17:59  epoch/iter: 75/6915  total_loss: 3.228  time: 0.4989  data_time: 0.0004  lr: 8.86e-03  max_mem: 4876M
+[06/16 11:32:36] fastreid.utils.events INFO:  eta: 0:17:17  epoch/iter: 76/6999  total_loss: 3.225  time: 0.4989  data_time: 0.0004  lr: 8.22e-03  max_mem: 4876M
+[06/16 11:32:39] fastreid.utils.events INFO:  eta: 0:17:14  epoch/iter: 76/7006  total_loss: 3.225  time: 0.4989  data_time: 0.0004  lr: 8.22e-03  max_mem: 4876M
+[06/16 11:33:26] fastreid.utils.events INFO:  eta: 0:16:28  epoch/iter: 77/7097  total_loss: 3.222  time: 0.4989  data_time: 0.0004  lr: 7.60e-03  max_mem: 4876M
+[06/16 11:34:12] fastreid.utils.events INFO:  eta: 0:15:43  epoch/iter: 78/7188  total_loss: 3.218  time: 0.4988  data_time: 0.0004  lr: 6.99e-03  max_mem: 4876M
+[06/16 11:34:17] fastreid.utils.events INFO:  eta: 0:15:38  epoch/iter: 79/7199  total_loss: 3.219  time: 0.4988  data_time: 0.0004  lr: 6.42e-03  max_mem: 4876M
+[06/16 11:34:57] fastreid.utils.events INFO:  eta: 0:14:58  epoch/iter: 79/7279  total_loss: 3.218  time: 0.4989  data_time: 0.0004  lr: 6.42e-03  max_mem: 4876M
+[06/16 11:35:43] fastreid.utils.events INFO:  eta: 0:14:14  epoch/iter: 80/7370  total_loss: 3.217  time: 0.4989  data_time: 0.0004  lr: 5.86e-03  max_mem: 4876M
+[06/16 11:35:57] fastreid.utils.events INFO:  eta: 0:13:59  epoch/iter: 81/7399  total_loss: 3.216  time: 0.4989  data_time: 0.0006  lr: 5.33e-03  max_mem: 4876M
+[06/16 11:36:28] fastreid.utils.events INFO:  eta: 0:13:29  epoch/iter: 81/7461  total_loss: 3.216  time: 0.4989  data_time: 0.0004  lr: 5.33e-03  max_mem: 4876M
+[06/16 11:37:14] fastreid.utils.events INFO:  eta: 0:12:44  epoch/iter: 82/7552  total_loss: 3.221  time: 0.4989  data_time: 0.0004  lr: 4.82e-03  max_mem: 4876M
+[06/16 11:37:37] fastreid.utils.events INFO:  eta: 0:12:21  epoch/iter: 83/7599  total_loss: 3.221  time: 0.4989  data_time: 0.0004  lr: 4.34e-03  max_mem: 4876M
+[06/16 11:37:59] fastreid.utils.events INFO:  eta: 0:11:59  epoch/iter: 83/7643  total_loss: 3.222  time: 0.4989  data_time: 0.0004  lr: 4.34e-03  max_mem: 4876M
+[06/16 11:38:44] fastreid.utils.events INFO:  eta: 0:11:14  epoch/iter: 84/7734  total_loss: 3.22  time: 0.4988  data_time: 0.0007  lr: 3.89e-03  max_mem: 4876M
+[06/16 11:39:17] fastreid.utils.events INFO:  eta: 0:10:41  epoch/iter: 85/7799  total_loss: 3.229  time: 0.4988  data_time: 0.0004  lr: 3.46e-03  max_mem: 4876M
+[06/16 11:39:30] fastreid.utils.events INFO:  eta: 0:10:29  epoch/iter: 85/7825  total_loss: 3.228  time: 0.4988  data_time: 0.0004  lr: 3.46e-03  max_mem: 4876M
+[06/16 11:40:15] fastreid.utils.events INFO:  eta: 0:09:44  epoch/iter: 86/7916  total_loss: 3.223  time: 0.4988  data_time: 0.0004  lr: 3.06e-03  max_mem: 4876M
+[06/16 11:40:56] fastreid.utils.events INFO:  eta: 0:09:03  epoch/iter: 87/7999  total_loss: 3.223  time: 0.4988  data_time: 0.0004  lr: 2.69e-03  max_mem: 4876M
+[06/16 11:41:01] fastreid.utils.events INFO:  eta: 0:08:59  epoch/iter: 87/8007  total_loss: 3.223  time: 0.4988  data_time: 0.0004  lr: 2.69e-03  max_mem: 4876M
+[06/16 11:41:46] fastreid.utils.events INFO:  eta: 0:08:14  epoch/iter: 88/8098  total_loss: 3.222  time: 0.4988  data_time: 0.0004  lr: 2.34e-03  max_mem: 4876M
+[06/16 11:42:31] fastreid.utils.events INFO:  eta: 0:07:30  epoch/iter: 89/8189  total_loss: 3.218  time: 0.4988  data_time: 0.0004  lr: 2.03e-03  max_mem: 4876M
+[06/16 11:42:36] fastreid.utils.events INFO:  eta: 0:07:25  epoch/iter: 90/8199  total_loss: 3.218  time: 0.4988  data_time: 0.0005  lr: 1.74e-03  max_mem: 4876M
+[06/16 11:43:17] fastreid.utils.events INFO:  eta: 0:06:44  epoch/iter: 90/8280  total_loss: 3.218  time: 0.4988  data_time: 0.0005  lr: 1.74e-03  max_mem: 4876M
+[06/16 11:44:03] fastreid.utils.events INFO:  eta: 0:05:59  epoch/iter: 91/8371  total_loss: 3.218  time: 0.4988  data_time: 0.0008  lr: 1.48e-03  max_mem: 4876M
+[06/16 11:44:17] fastreid.utils.events INFO:  eta: 0:05:46  epoch/iter: 92/8399  total_loss: 3.217  time: 0.4988  data_time: 0.0004  lr: 1.25e-03  max_mem: 4876M
+[06/16 11:44:48] fastreid.utils.events INFO:  eta: 0:05:14  epoch/iter: 92/8462  total_loss: 3.213  time: 0.4988  data_time: 0.0005  lr: 1.25e-03  max_mem: 4876M
+[06/16 11:45:34] fastreid.utils.events INFO:  eta: 0:04:29  epoch/iter: 93/8553  total_loss: 3.212  time: 0.4988  data_time: 0.0005  lr: 1.05e-03  max_mem: 4876M
+[06/16 11:45:57] fastreid.utils.events INFO:  eta: 0:04:07  epoch/iter: 94/8599  total_loss: 3.215  time: 0.4988  data_time: 0.0005  lr: 8.84e-04  max_mem: 4876M
+[06/16 11:46:19] fastreid.utils.events INFO:  eta: 0:03:45  epoch/iter: 94/8644  total_loss: 3.218  time: 0.4988  data_time: 0.0005  lr: 8.84e-04  max_mem: 4876M
+[06/16 11:47:05] fastreid.utils.events INFO:  eta: 0:03:00  epoch/iter: 95/8735  total_loss: 3.218  time: 0.4988  data_time: 0.0006  lr: 7.46e-04  max_mem: 4876M
+[06/16 11:47:37] fastreid.utils.events INFO:  eta: 0:02:28  epoch/iter: 96/8799  total_loss: 3.218  time: 0.4988  data_time: 0.0004  lr: 6.39e-04  max_mem: 4876M
+[06/16 11:47:50] fastreid.utils.events INFO:  eta: 0:02:15  epoch/iter: 96/8826  total_loss: 3.22  time: 0.4988  data_time: 0.0006  lr: 6.39e-04  max_mem: 4876M
+[06/16 11:48:35] fastreid.utils.events INFO:  eta: 0:01:30  epoch/iter: 97/8917  total_loss: 3.219  time: 0.4988  data_time: 0.0006  lr: 5.62e-04  max_mem: 4876M
+[06/16 11:49:16] fastreid.utils.events INFO:  eta: 0:00:49  epoch/iter: 98/8999  total_loss: 3.215  time: 0.4987  data_time: 0.0006  lr: 5.15e-04  max_mem: 4876M
+[06/16 11:49:20] fastreid.utils.events INFO:  eta: 0:00:44  epoch/iter: 98/9008  total_loss: 3.215  time: 0.4987  data_time: 0.0007  lr: 5.15e-04  max_mem: 4876M
+[06/16 11:50:05] fastreid.utils.events INFO:  eta: 0:00:00  epoch/iter: 99/9099  total_loss: 3.216  time: 0.4987  data_time: 0.0006  lr: 5.00e-04  max_mem: 4876M
+[06/16 11:50:05] fastreid.engine.defaults INFO: Prepare testing set
+[06/16 11:50:05] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 100     | 5924       | 1           |
+| gallery  | 0       | 0          | 0           |[0m
+[06/16 11:50:05] fastreid.evaluation.evaluator INFO: Start inference on 5924 images
+[06/16 11:50:08] fastreid.evaluation.evaluator INFO: Inference done 11/93. 0.1403 s / batch. ETA=0:00:12
+[06/16 11:50:20] fastreid.evaluation.evaluator INFO: Total inference time: 0:00:13.266413 (0.150755 s / batch per device, on 1 devices)
+[06/16 11:50:20] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:00:12 (0.140717 s / batch per device, on 1 devices)
+[06/16 11:50:20] fastreid.engine.defaults INFO: Evaluation results for CUB in csv format:
+[06/16 11:50:20] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@2   | Recall@4   | Recall@8   | Recall@16   | Recall@32   | metric   |
+|:----------|:-----------|:-----------|:-----------|:-----------|:------------|:------------|:---------|
+| CUB       | 76.45      | 84.88      | 90.34      | 94.36      | 96.47       | 97.77       | 76.45    |[0m
+[06/16 11:50:20] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_cub/model_best.pth
+[06/16 11:50:21] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_cub/model_final.pth
+[06/16 11:50:21] fastreid.utils.events INFO:  eta: 0:00:00  epoch/iter: 99/9099  total_loss: 3.216  time: 0.4987  data_time: 0.0006  lr: 5.00e-04  max_mem: 4876M
+[06/16 11:50:21] fastreid.engine.hooks INFO: Overall training speed: 9098 iterations in 1:15:36 (0.4987 s / it)
+[06/16 11:50:21] fastreid.engine.hooks INFO: Total training time: 1:16:58 (0:01:21 on hooks)
+[06/19 10:33:25] fastreid INFO: Rank of current process: 0. World size: 1
+[06/19 10:33:30] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/19 10:33:30] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/19 10:33:30] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/19 10:33:30] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/19 10:33:30] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/19 10:33:30] fastreid.utils.env INFO: Using a generated random seed 30691469
+[06/19 10:33:30] fastreid.dml_dataset INFO: Prepare training set
+[06/19 10:33:30] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/19 10:33:30] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/19 10:33:31] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/19 10:33:31] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/19 10:33:33] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/19 10:33:33] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/19 10:33:34] fastreid.engine.train_loop ERROR: Exception during training:
+Traceback (most recent call last):
+  File "./fastreid/engine/train_loop.py", line 143, in train
+    self.run_step()
+  File "./fastreid/engine/defaults.py", line 385, in run_step
+    self._trainer.run_step()
+  File "./fastreid/engine/train_loop.py", line 316, in run_step
+    loss_dict = self.model(data)
+  File "/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch/nn/modules/module.py", line 722, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "./fastreid/modeling/meta_arch/baseline.py", line 40, in forward
+    print(batched_inputs.shape,  images.shape)
+AttributeError: 'dict' object has no attribute 'shape'
+[06/19 10:33:34] fastreid.engine.hooks INFO: Total training time: 0:00:01 (0:00:00 on hooks)
+[06/19 10:33:49] fastreid INFO: Rank of current process: 0. World size: 1
+[06/19 10:33:54] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/19 10:33:54] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/19 10:33:54] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/19 10:33:54] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/19 10:33:54] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/19 10:33:54] fastreid.utils.env INFO: Using a generated random seed 54263250
+[06/19 10:33:54] fastreid.dml_dataset INFO: Prepare training set
+[06/19 10:33:54] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/19 10:33:54] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/19 10:33:54] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/19 10:33:54] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/19 10:33:57] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/19 10:33:57] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/19 10:33:58] fastreid.engine.train_loop ERROR: Exception during training:
+Traceback (most recent call last):
+  File "./fastreid/engine/train_loop.py", line 143, in train
+    self.run_step()
+  File "./fastreid/engine/defaults.py", line 385, in run_step
+    self._trainer.run_step()
+  File "./fastreid/engine/train_loop.py", line 316, in run_step
+    loss_dict = self.model(data)
+  File "/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch/nn/modules/module.py", line 722, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "./fastreid/modeling/meta_arch/baseline.py", line 40, in forward
+    print(batched_inputs[0].shape,  images[0].shape)
+KeyError: 0
+[06/19 10:33:58] fastreid.engine.hooks INFO: Total training time: 0:00:00 (0:00:00 on hooks)
+[06/19 10:34:31] fastreid INFO: Rank of current process: 0. World size: 1
+[06/19 10:34:36] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/19 10:34:36] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/19 10:34:36] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/19 10:34:36] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/19 10:34:36] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/19 10:34:36] fastreid.utils.env INFO: Using a generated random seed 36081872
+[06/19 10:34:36] fastreid.dml_dataset INFO: Prepare training set
+[06/19 10:34:36] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/19 10:34:36] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/19 10:34:36] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/19 10:34:36] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/19 10:34:39] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/19 10:34:39] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/19 10:34:40] fastreid.engine.train_loop ERROR: Exception during training:
+Traceback (most recent call last):
+  File "./fastreid/engine/train_loop.py", line 143, in train
+    self.run_step()
+  File "./fastreid/engine/defaults.py", line 385, in run_step
+    self._trainer.run_step()
+  File "./fastreid/engine/train_loop.py", line 316, in run_step
+    loss_dict = self.model(data)
+  File "/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch/nn/modules/module.py", line 722, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "./fastreid/modeling/meta_arch/baseline.py", line 40, in forward
+    print(batched_inputs[0].shape,  images[0].shape)
+KeyError: 0
+[06/19 10:34:40] fastreid.engine.hooks INFO: Total training time: 0:00:01 (0:00:00 on hooks)
+[06/19 10:42:24] fastreid INFO: Rank of current process: 0. World size: 1
+[06/19 10:42:28] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/19 10:42:28] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/19 10:42:28] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/19 10:42:28] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/19 10:42:29] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/19 10:42:29] fastreid.utils.env INFO: Using a generated random seed 29066648
+[06/19 10:42:29] fastreid.dml_dataset INFO: Prepare training set
+[06/19 10:42:29] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/19 10:42:29] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/19 10:42:29] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/19 10:42:29] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/19 10:42:32] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/19 10:42:32] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/19 10:42:33] fastreid.engine.train_loop ERROR: Exception during training:
+Traceback (most recent call last):
+  File "./fastreid/engine/train_loop.py", line 143, in train
+    self.run_step()
+  File "./fastreid/engine/defaults.py", line 385, in run_step
+    self._trainer.run_step()
+  File "./fastreid/engine/train_loop.py", line 316, in run_step
+    loss_dict = self.model(data)
+  File "/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch/nn/modules/module.py", line 722, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "./fastreid/modeling/meta_arch/baseline.py", line 40, in forward
+    print(batched_inputs[0][0].shape,  images[0].shape)
+KeyError: 0
+[06/19 10:42:33] fastreid.engine.hooks INFO: Total training time: 0:00:01 (0:00:00 on hooks)
+[06/19 10:43:03] fastreid INFO: Rank of current process: 0. World size: 1
+[06/19 10:43:07] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/19 10:43:07] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/19 10:43:07] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/19 10:43:07] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/19 10:43:07] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/19 10:43:07] fastreid.utils.env INFO: Using a generated random seed 7824913
+[06/19 10:43:07] fastreid.dml_dataset INFO: Prepare training set
+[06/19 10:43:07] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/19 10:43:07] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/19 10:43:08] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/19 10:43:08] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/19 10:43:11] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/19 10:43:11] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/19 10:43:14] fastreid.engine.hooks INFO: Overall training speed: 1 iterations in 0:00:00 (0.9412 s / it)
+[06/19 10:43:14] fastreid.engine.hooks INFO: Total training time: 0:00:00 (0:00:00 on hooks)
+[06/23 09:31:01] fastreid INFO: Rank of current process: 0. World size: 1
+[06/23 09:31:02] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/23 09:31:02] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/23 09:31:02] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/23 09:31:02] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/23 09:31:02] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/23 09:31:02] fastreid.utils.env INFO: Using a generated random seed 2203674
+[06/23 09:31:02] fastreid.dml_dataset INFO: Prepare training set
+[06/23 09:31:02] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/23 09:31:02] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/23 09:31:02] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/23 09:31:03] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/23 09:31:07] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/23 09:31:07] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/23 09:31:38] fastreid.engine.hooks INFO: Overall training speed: 46 iterations in 0:00:28 (0.6119 s / it)
+[06/23 09:31:38] fastreid.engine.hooks INFO: Total training time: 0:00:28 (0:00:00 on hooks)
+[06/23 09:32:01] fastreid INFO: Rank of current process: 0. World size: 1
+[06/23 09:32:02] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/23 09:32:02] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/23 09:32:02] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/23 09:32:02] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/23 09:32:02] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/23 09:32:02] fastreid.utils.env INFO: Using a generated random seed 2130861
+[06/23 09:32:02] fastreid.dml_dataset INFO: Prepare training set
+[06/23 09:32:02] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/23 09:32:02] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/23 09:32:02] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/23 09:32:03] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/23 09:32:26] fastreid INFO: Rank of current process: 0. World size: 1
+[06/23 09:32:26] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/23 09:32:26] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/cub.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/23 09:32:26] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/cub.yml:
+_BASE_: base-image_retri.yml
+
+MODEL:
+  LOSSES:
+    CE:
+      EPSILON: 0.4
+
+INPUT:
+  SIZE_TRAIN: [256,]
+  SIZE_TEST: [256,]
+
+  CJ:
+    ENABLED: True
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    SATURATION: 0.25
+    HUE: 0.0
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.05
+  ETA_MIN_LR: 0.0005
+
+  MOMENTUM: 0.
+
+TEST:
+  RECALLS: [ 1, 2, 4, 8, 16, 32 ]
+
+DATASETS:
+  NAMES: ("CUB",)
+  TESTS: ("CUB",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+
+[06/23 09:32:26] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('CUB',)
+  TESTS: ('CUB',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.25
+    CONTRAST: 0.25
+    ENABLED: True
+    HUE: 0.0
+    PROB: 0.5
+    SATURATION: 0.25
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [256]
+  SIZE_TRAIN: [256]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.4
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_cub
+SOLVER:
+  BASE_LR: 0.05
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 0.0005
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.0
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 2, 4, 8, 16, 32]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/23 09:32:26] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_cub/config.yaml
+[06/23 09:32:26] fastreid.utils.env INFO: Using a generated random seed 26970560
+[06/23 09:32:26] fastreid.dml_dataset INFO: Prepare training set
+[06/23 09:32:26] fastreid.data.datasets.bases INFO: => Loaded CUB in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 100     | 5864       | 1           |[0m
+[06/23 09:32:26] fastreid.engine.defaults INFO: Auto-scaling the num_classes=100
+[06/23 09:32:27] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/23 09:32:30] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/23 09:32:35] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/23 09:32:35] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/23 09:33:37] fastreid.utils.events INFO:  eta: 1:12:39  epoch/iter: 0/90  total_loss: 4.271  time: 0.6577  data_time: 0.1143  lr: 9.05e-03  max_mem: 4873M
+[06/23 09:34:29] fastreid.utils.events INFO:  eta: 1:12:08  epoch/iter: 1/181  total_loss: 3.913  time: 0.5714  data_time: 0.0007  lr: 1.31e-02  max_mem: 4873M
+[06/23 09:34:37] fastreid.utils.events INFO:  eta: 1:12:03  epoch/iter: 2/199  total_loss: 3.822  time: 0.5640  data_time: 0.0007  lr: 1.40e-02  max_mem: 4873M
+[06/23 09:35:13] fastreid.utils.events INFO:  eta: 1:11:36  epoch/iter: 2/272  total_loss: 3.533  time: 0.5439  data_time: 0.0008  lr: 1.72e-02  max_mem: 4873M
+[06/23 09:35:58] fastreid.utils.events INFO:  eta: 1:10:56  epoch/iter: 3/363  total_loss: 3.303  time: 0.5302  data_time: 0.0007  lr: 2.13e-02  max_mem: 4873M
+[06/23 09:36:16] fastreid.utils.events INFO:  eta: 1:10:40  epoch/iter: 4/399  total_loss: 3.255  time: 0.5265  data_time: 0.0005  lr: 2.30e-02  max_mem: 4873M
+[06/23 09:36:43] fastreid.utils.events INFO:  eta: 1:10:16  epoch/iter: 4/454  total_loss: 3.206  time: 0.5222  data_time: 0.0008  lr: 2.54e-02  max_mem: 4873M
+[06/23 09:37:28] fastreid.utils.events INFO:  eta: 1:09:35  epoch/iter: 5/545  total_loss: 3.151  time: 0.5170  data_time: 0.0007  lr: 2.95e-02  max_mem: 4875M

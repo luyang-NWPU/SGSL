@@ -1,0 +1,803 @@
+[06/17 03:18:24] fastreid INFO: Rank of current process: 0. World size: 1
+[06/17 03:18:29] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/17 03:18:29] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/inshop.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/17 03:18:29] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/inshop.yml:
+_BASE_: base-image_retri.yml
+
+INPUT:
+  SIZE_TRAIN: [0,]
+  SIZE_TEST: [0,]
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.003
+  ETA_MIN_LR: 0.00003
+
+  MOMENTUM: 0.99
+  NESTEROV: True
+
+TEST:
+  RECALLS: [ 1, 10, 20, 30, 40, 50 ]
+
+DATASETS:
+  NAMES: ("InShop",)
+  TESTS: ("InShop",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_inshop
+[06/17 03:18:29] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('InShop',)
+  TESTS: ('InShop',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.3
+    CONTRAST: 0.3
+    ENABLED: False
+    HUE: 0.1
+    PROB: 0.5
+    SATURATION: 0.1
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [0]
+  SIZE_TRAIN: [0]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.1
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_inshop
+SOLVER:
+  BASE_LR: 0.003
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 3e-05
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.99
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 10, 20, 30, 40, 50]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/17 03:18:29] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_inshop/config.yaml
+[06/17 03:18:29] fastreid.utils.env INFO: Using a generated random seed 29997249
+[06/17 03:18:29] fastreid.dml_dataset INFO: Prepare training set
+[06/17 03:18:30] fastreid.data.datasets.bases INFO: => Loaded InShop in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 3997    | 25882      | 1           |[0m
+[06/17 03:18:30] fastreid.engine.defaults INFO: Auto-scaling the num_classes=3997
+[06/17 03:18:30] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/17 03:18:30] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/17 03:18:34] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/17 03:18:34] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/17 03:20:15] fastreid.utils.events INFO:  eta: 5:32:22  epoch/iter: 0/199  total_loss: 8.28  time: 0.5022  data_time: 0.0012  lr: 8.37e-04  max_mem: 5102M
+[06/17 03:21:56] fastreid.utils.events INFO:  eta: 5:31:26  epoch/iter: 0/399  total_loss: 7.627  time: 0.5032  data_time: 0.0019  lr: 1.38e-03  max_mem: 5102M
+[06/17 03:21:58] fastreid.utils.events INFO:  eta: 5:31:16  epoch/iter: 0/403  total_loss: 7.584  time: 0.5031  data_time: 0.0019  lr: 1.39e-03  max_mem: 5102M
+[06/17 03:23:36] fastreid.utils.events INFO:  eta: 5:29:38  epoch/iter: 1/599  total_loss: 6.566  time: 0.5034  data_time: 0.0010  lr: 1.92e-03  max_mem: 5102M
+[06/17 03:25:17] fastreid.utils.events INFO:  eta: 5:27:32  epoch/iter: 1/799  total_loss: 5.473  time: 0.5027  data_time: 0.0018  lr: 2.46e-03  max_mem: 5102M
+[06/17 03:25:21] fastreid.utils.events INFO:  eta: 5:27:27  epoch/iter: 1/807  total_loss: 5.433  time: 0.5026  data_time: 0.0017  lr: 2.48e-03  max_mem: 5102M
+[06/17 03:26:56] fastreid.utils.events INFO:  eta: 5:25:28  epoch/iter: 2/999  total_loss: 5.151  time: 0.5016  data_time: 0.0008  lr: 3.00e-03  max_mem: 5102M
+[06/17 03:28:36] fastreid.utils.events INFO:  eta: 5:23:28  epoch/iter: 2/1199  total_loss: 4.453  time: 0.5009  data_time: 0.0016  lr: 3.00e-03  max_mem: 5102M
+[06/17 03:28:42] fastreid.utils.events INFO:  eta: 5:23:21  epoch/iter: 2/1211  total_loss: 4.386  time: 0.5009  data_time: 0.0015  lr: 3.00e-03  max_mem: 5102M
+[06/17 03:30:15] fastreid.utils.events INFO:  eta: 5:20:56  epoch/iter: 3/1399  total_loss: 4.275  time: 0.5003  data_time: 0.0007  lr: 3.00e-03  max_mem: 5102M
+[06/17 03:31:54] fastreid.utils.events INFO:  eta: 5:18:46  epoch/iter: 3/1599  total_loss: 3.633  time: 0.4999  data_time: 0.0014  lr: 3.00e-03  max_mem: 5102M
+[06/17 03:32:03] fastreid.utils.events INFO:  eta: 5:18:38  epoch/iter: 3/1615  total_loss: 3.57  time: 0.4998  data_time: 0.0015  lr: 3.00e-03  max_mem: 5102M
+[06/17 03:33:34] fastreid.utils.events INFO:  eta: 5:16:57  epoch/iter: 4/1799  total_loss: 3.515  time: 0.4993  data_time: 0.0006  lr: 3.00e-03  max_mem: 5104M
+[06/17 03:35:13] fastreid.utils.events INFO:  eta: 5:15:23  epoch/iter: 4/1999  total_loss: 3.382  time: 0.4992  data_time: 0.0013  lr: 3.00e-03  max_mem: 5104M
+[06/17 03:35:23] fastreid.utils.events INFO:  eta: 5:15:12  epoch/iter: 4/2019  total_loss: 3.382  time: 0.4992  data_time: 0.0012  lr: 3.00e-03  max_mem: 5104M
+[06/17 03:36:53] fastreid.utils.events INFO:  eta: 5:13:54  epoch/iter: 5/2199  total_loss: 3.326  time: 0.4992  data_time: 0.0004  lr: 2.99e-03  max_mem: 5104M
+[06/17 03:38:34] fastreid.utils.events INFO:  eta: 5:12:46  epoch/iter: 5/2399  total_loss: 3.158  time: 0.4994  data_time: 0.0012  lr: 2.99e-03  max_mem: 5104M
+[06/17 03:38:46] fastreid.utils.events INFO:  eta: 5:12:37  epoch/iter: 5/2423  total_loss: 3.143  time: 0.4995  data_time: 0.0011  lr: 2.99e-03  max_mem: 5104M
+[06/17 03:40:14] fastreid.utils.events INFO:  eta: 5:11:31  epoch/iter: 6/2599  total_loss: 3.144  time: 0.4997  data_time: 0.0020  lr: 2.99e-03  max_mem: 5104M
+[06/17 03:41:54] fastreid.utils.events INFO:  eta: 5:10:14  epoch/iter: 6/2799  total_loss: 2.926  time: 0.4997  data_time: 0.0010  lr: 2.99e-03  max_mem: 5104M
+[06/17 03:42:08] fastreid.utils.events INFO:  eta: 5:10:04  epoch/iter: 6/2827  total_loss: 2.917  time: 0.4996  data_time: 0.0010  lr: 2.99e-03  max_mem: 5104M
+[06/17 03:43:35] fastreid.utils.events INFO:  eta: 5:08:46  epoch/iter: 7/2999  total_loss: 2.901  time: 0.4998  data_time: 0.0018  lr: 2.98e-03  max_mem: 5104M
+[06/17 03:45:15] fastreid.utils.events INFO:  eta: 5:07:30  epoch/iter: 7/3199  total_loss: 2.718  time: 0.5000  data_time: 0.0009  lr: 2.98e-03  max_mem: 5104M
+[06/17 03:45:31] fastreid.utils.events INFO:  eta: 5:07:14  epoch/iter: 7/3231  total_loss: 2.727  time: 0.5001  data_time: 0.0008  lr: 2.98e-03  max_mem: 5104M
+[06/17 03:46:56] fastreid.utils.events INFO:  eta: 5:05:47  epoch/iter: 8/3399  total_loss: 2.678  time: 0.5002  data_time: 0.0017  lr: 2.97e-03  max_mem: 5104M
+[06/17 03:48:36] fastreid.utils.events INFO:  eta: 5:03:56  epoch/iter: 8/3599  total_loss: 2.585  time: 0.5002  data_time: 0.0008  lr: 2.97e-03  max_mem: 5104M
+[06/17 03:48:54] fastreid.utils.events INFO:  eta: 5:03:39  epoch/iter: 8/3635  total_loss: 2.6  time: 0.5002  data_time: 0.0006  lr: 2.97e-03  max_mem: 5104M
+[06/17 03:50:17] fastreid.utils.events INFO:  eta: 5:02:33  epoch/iter: 9/3799  total_loss: 2.493  time: 0.5003  data_time: 0.0016  lr: 2.96e-03  max_mem: 5104M
+[06/17 03:51:57] fastreid.utils.events INFO:  eta: 5:00:51  epoch/iter: 9/3999  total_loss: 2.485  time: 0.5003  data_time: 0.0006  lr: 2.96e-03  max_mem: 5104M
+[06/17 03:52:17] fastreid.utils.events INFO:  eta: 5:00:30  epoch/iter: 9/4039  total_loss: 2.49  time: 0.5004  data_time: 0.0005  lr: 2.96e-03  max_mem: 5104M
+[06/17 03:53:37] fastreid.utils.events INFO:  eta: 4:58:55  epoch/iter: 10/4199  total_loss: 2.415  time: 0.5004  data_time: 0.0015  lr: 2.95e-03  max_mem: 5104M
+[06/17 03:55:17] fastreid.utils.events INFO:  eta: 4:57:10  epoch/iter: 10/4399  total_loss: 2.411  time: 0.5003  data_time: 0.0005  lr: 2.95e-03  max_mem: 5104M
+[06/17 03:55:39] fastreid.utils.events INFO:  eta: 4:56:52  epoch/iter: 10/4443  total_loss: 2.423  time: 0.5004  data_time: 0.0016  lr: 2.95e-03  max_mem: 5104M
+[06/17 03:56:58] fastreid.utils.events INFO:  eta: 4:55:40  epoch/iter: 11/4599  total_loss: 2.342  time: 0.5004  data_time: 0.0013  lr: 2.94e-03  max_mem: 5104M
+[06/17 03:58:38] fastreid.utils.events INFO:  eta: 4:54:01  epoch/iter: 11/4799  total_loss: 2.369  time: 0.5005  data_time: 0.0004  lr: 2.94e-03  max_mem: 5104M
+[06/17 03:59:02] fastreid.utils.events INFO:  eta: 4:53:37  epoch/iter: 11/4847  total_loss: 2.349  time: 0.5004  data_time: 0.0018  lr: 2.94e-03  max_mem: 5104M
+[06/17 04:00:18] fastreid.utils.events INFO:  eta: 4:52:15  epoch/iter: 12/4999  total_loss: 2.28  time: 0.5004  data_time: 0.0012  lr: 2.92e-03  max_mem: 5104M
+[06/17 04:01:58] fastreid.utils.events INFO:  eta: 4:50:43  epoch/iter: 12/5199  total_loss: 2.336  time: 0.5004  data_time: 0.0019  lr: 2.92e-03  max_mem: 5104M
+[06/17 04:02:24] fastreid.utils.events INFO:  eta: 4:50:26  epoch/iter: 12/5251  total_loss: 2.307  time: 0.5004  data_time: 0.0017  lr: 2.92e-03  max_mem: 5104M
+[06/17 04:03:39] fastreid.utils.events INFO:  eta: 4:49:21  epoch/iter: 13/5399  total_loss: 2.231  time: 0.5005  data_time: 0.0011  lr: 2.91e-03  max_mem: 5104M
+[06/17 04:05:19] fastreid.utils.events INFO:  eta: 4:47:46  epoch/iter: 13/5599  total_loss: 2.284  time: 0.5006  data_time: 0.0018  lr: 2.91e-03  max_mem: 5104M
+[06/17 04:05:48] fastreid.utils.events INFO:  eta: 4:47:17  epoch/iter: 13/5655  total_loss: 2.275  time: 0.5006  data_time: 0.0016  lr: 2.91e-03  max_mem: 5104M
+[06/17 04:07:00] fastreid.utils.events INFO:  eta: 4:46:04  epoch/iter: 14/5799  total_loss: 2.237  time: 0.5006  data_time: 0.0009  lr: 2.89e-03  max_mem: 5104M
+[06/17 04:08:40] fastreid.utils.events INFO:  eta: 4:44:29  epoch/iter: 14/5999  total_loss: 2.254  time: 0.5006  data_time: 0.0017  lr: 2.89e-03  max_mem: 5104M
+[06/17 04:09:10] fastreid.utils.events INFO:  eta: 4:44:02  epoch/iter: 14/6059  total_loss: 2.233  time: 0.5006  data_time: 0.0014  lr: 2.89e-03  max_mem: 5104M
+[06/17 04:10:20] fastreid.utils.events INFO:  eta: 4:42:49  epoch/iter: 15/6199  total_loss: 2.223  time: 0.5007  data_time: 0.0008  lr: 2.87e-03  max_mem: 5104M
+[06/17 04:12:00] fastreid.utils.events INFO:  eta: 4:40:50  epoch/iter: 15/6399  total_loss: 2.212  time: 0.5006  data_time: 0.0015  lr: 2.87e-03  max_mem: 5104M
+[06/17 04:12:32] fastreid.utils.events INFO:  eta: 4:40:17  epoch/iter: 15/6463  total_loss: 2.196  time: 0.5006  data_time: 0.0013  lr: 2.87e-03  max_mem: 5104M
+[06/17 04:13:40] fastreid.utils.events INFO:  eta: 4:39:08  epoch/iter: 16/6599  total_loss: 2.218  time: 0.5006  data_time: 0.0006  lr: 2.85e-03  max_mem: 5104M
+[06/17 04:15:21] fastreid.utils.events INFO:  eta: 4:37:35  epoch/iter: 16/6799  total_loss: 2.167  time: 0.5006  data_time: 0.0014  lr: 2.85e-03  max_mem: 5104M
+[06/17 04:15:55] fastreid.utils.events INFO:  eta: 4:37:07  epoch/iter: 16/6867  total_loss: 2.16  time: 0.5007  data_time: 0.0011  lr: 2.85e-03  max_mem: 5104M
+[06/17 04:17:02] fastreid.utils.events INFO:  eta: 4:36:11  epoch/iter: 17/6999  total_loss: 2.19  time: 0.5007  data_time: 0.0005  lr: 2.83e-03  max_mem: 5104M
+[06/17 04:18:42] fastreid.utils.events INFO:  eta: 4:34:34  epoch/iter: 17/7199  total_loss: 2.157  time: 0.5008  data_time: 0.0013  lr: 2.83e-03  max_mem: 5104M
+[06/17 04:19:18] fastreid.utils.events INFO:  eta: 4:34:09  epoch/iter: 17/7271  total_loss: 2.164  time: 0.5008  data_time: 0.0009  lr: 2.83e-03  max_mem: 5104M
+[06/17 04:20:23] fastreid.utils.events INFO:  eta: 4:33:11  epoch/iter: 18/7399  total_loss: 2.204  time: 0.5009  data_time: 0.0011  lr: 2.81e-03  max_mem: 5104M
+[06/17 04:22:04] fastreid.utils.events INFO:  eta: 4:31:41  epoch/iter: 18/7599  total_loss: 2.149  time: 0.5010  data_time: 0.0011  lr: 2.81e-03  max_mem: 5104M
+[06/17 04:22:42] fastreid.utils.events INFO:  eta: 4:31:04  epoch/iter: 18/7675  total_loss: 2.167  time: 0.5010  data_time: 0.0008  lr: 2.81e-03  max_mem: 5104M
+[06/17 04:23:45] fastreid.utils.events INFO:  eta: 4:30:16  epoch/iter: 19/7799  total_loss: 2.184  time: 0.5011  data_time: 0.0019  lr: 2.78e-03  max_mem: 5104M
+[06/17 04:25:25] fastreid.utils.events INFO:  eta: 4:28:23  epoch/iter: 19/7999  total_loss: 2.126  time: 0.5011  data_time: 0.0011  lr: 2.78e-03  max_mem: 5104M
+[06/17 04:26:05] fastreid.utils.events INFO:  eta: 4:27:50  epoch/iter: 19/8079  total_loss: 2.146  time: 0.5011  data_time: 0.0007  lr: 2.78e-03  max_mem: 5104M
+[06/17 04:27:06] fastreid.utils.events INFO:  eta: 4:26:51  epoch/iter: 20/8199  total_loss: 2.158  time: 0.5011  data_time: 0.0018  lr: 2.75e-03  max_mem: 5104M
+[06/17 04:28:47] fastreid.utils.events INFO:  eta: 4:25:15  epoch/iter: 20/8399  total_loss: 2.127  time: 0.5012  data_time: 0.0008  lr: 2.75e-03  max_mem: 5104M
+[06/17 04:29:29] fastreid.utils.events INFO:  eta: 4:24:31  epoch/iter: 20/8483  total_loss: 2.145  time: 0.5012  data_time: 0.0005  lr: 2.75e-03  max_mem: 5104M
+[06/17 04:30:27] fastreid.utils.events INFO:  eta: 4:23:37  epoch/iter: 21/8599  total_loss: 2.139  time: 0.5012  data_time: 0.0016  lr: 2.73e-03  max_mem: 5104M
+[06/17 04:32:09] fastreid.utils.events INFO:  eta: 4:21:54  epoch/iter: 21/8799  total_loss: 2.12  time: 0.5013  data_time: 0.0008  lr: 2.73e-03  max_mem: 5104M
+[06/17 04:32:53] fastreid.utils.events INFO:  eta: 4:21:21  epoch/iter: 21/8887  total_loss: 2.149  time: 0.5014  data_time: 0.0019  lr: 2.73e-03  max_mem: 5104M
+[06/17 04:33:49] fastreid.utils.events INFO:  eta: 4:20:29  epoch/iter: 22/8999  total_loss: 2.117  time: 0.5014  data_time: 0.0015  lr: 2.70e-03  max_mem: 5104M
+[06/17 04:35:30] fastreid.utils.events INFO:  eta: 4:18:42  epoch/iter: 22/9199  total_loss: 2.123  time: 0.5014  data_time: 0.0006  lr: 2.70e-03  max_mem: 5104M
+[06/17 04:36:16] fastreid.utils.events INFO:  eta: 4:17:53  epoch/iter: 22/9291  total_loss: 2.136  time: 0.5014  data_time: 0.0018  lr: 2.70e-03  max_mem: 5104M
+[06/17 04:37:10] fastreid.utils.events INFO:  eta: 4:16:54  epoch/iter: 23/9399  total_loss: 2.114  time: 0.5014  data_time: 0.0014  lr: 2.67e-03  max_mem: 5104M
+[06/17 04:38:50] fastreid.utils.events INFO:  eta: 4:14:59  epoch/iter: 23/9599  total_loss: 2.112  time: 0.5014  data_time: 0.0005  lr: 2.67e-03  max_mem: 5104M
+[06/17 04:39:38] fastreid.utils.events INFO:  eta: 4:14:11  epoch/iter: 23/9695  total_loss: 2.103  time: 0.5014  data_time: 0.0017  lr: 2.67e-03  max_mem: 5104M
+[06/17 04:40:31] fastreid.utils.events INFO:  eta: 4:13:16  epoch/iter: 24/9799  total_loss: 2.078  time: 0.5014  data_time: 0.0012  lr: 2.64e-03  max_mem: 5104M
+[06/17 04:42:11] fastreid.utils.events INFO:  eta: 4:11:27  epoch/iter: 24/9999  total_loss: 2.103  time: 0.5014  data_time: 0.0018  lr: 2.64e-03  max_mem: 5104M
+[06/17 04:43:01] fastreid.engine.defaults INFO: Prepare testing set
+[06/17 04:43:02] fastreid.data.datasets.bases INFO: => Loaded InShop in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 3985    | 14218      | 1           |
+| gallery  | 3985    | 12612      | 1           |[0m
+[06/17 04:43:02] fastreid.evaluation.evaluator INFO: Start inference on 26830 images
+[06/17 04:43:04] fastreid.evaluation.evaluator INFO: Inference done 11/420. 0.1653 s / batch. ETA=0:01:07
+[06/17 04:43:34] fastreid.evaluation.evaluator INFO: Inference done 213/420. 0.1481 s / batch. ETA=0:00:30
+[06/17 04:44:04] fastreid.evaluation.evaluator INFO: Inference done 414/420. 0.1484 s / batch. ETA=0:00:00
+[06/17 04:44:05] fastreid.evaluation.evaluator INFO: Total inference time: 0:01:01.920988 (0.149207 s / batch per device, on 1 devices)
+[06/17 04:44:05] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:01:01 (0.148029 s / batch per device, on 1 devices)
+[06/17 04:44:06] fastreid.engine.defaults INFO: Evaluation results for InShop in csv format:
+[06/17 04:44:06] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@10   | Recall@20   | Recall@30   | Recall@40   | Recall@50   | metric   |
+|:----------|:-----------|:------------|:------------|:------------|:------------|:------------|:---------|
+| InShop    | 87.45      | 97.00       | 97.97       | 98.48       | 98.81       | 99.02       | 87.45    |[0m
+[06/17 04:44:06] fastreid.utils.events INFO:  eta: 4:10:42  epoch/iter: 24/10099  total_loss: 2.078  time: 0.5014  data_time: 0.0015  lr: 2.64e-03  max_mem: 5104M
+[06/17 04:44:56] fastreid.utils.events INFO:  eta: 4:10:02  epoch/iter: 25/10199  total_loss: 2.059  time: 0.5014  data_time: 0.0011  lr: 2.61e-03  max_mem: 5104M
+[06/17 04:46:37] fastreid.utils.events INFO:  eta: 4:08:39  epoch/iter: 25/10399  total_loss: 2.087  time: 0.5015  data_time: 0.0018  lr: 2.61e-03  max_mem: 5104M
+[06/17 04:47:30] fastreid.utils.events INFO:  eta: 4:07:52  epoch/iter: 25/10503  total_loss: 2.062  time: 0.5015  data_time: 0.0014  lr: 2.61e-03  max_mem: 5104M
+[06/17 04:48:18] fastreid.utils.events INFO:  eta: 4:07:10  epoch/iter: 26/10599  total_loss: 2.053  time: 0.5016  data_time: 0.0010  lr: 2.57e-03  max_mem: 5104M
+[06/17 04:49:59] fastreid.utils.events INFO:  eta: 4:05:36  epoch/iter: 26/10799  total_loss: 2.072  time: 0.5016  data_time: 0.0017  lr: 2.57e-03  max_mem: 5104M
+[06/17 04:50:54] fastreid.utils.events INFO:  eta: 4:04:49  epoch/iter: 26/10907  total_loss: 2.045  time: 0.5017  data_time: 0.0012  lr: 2.57e-03  max_mem: 5104M
+[06/17 04:51:40] fastreid.utils.events INFO:  eta: 4:04:13  epoch/iter: 27/10999  total_loss: 2.06  time: 0.5017  data_time: 0.0008  lr: 2.54e-03  max_mem: 5104M
+[06/17 04:53:21] fastreid.utils.events INFO:  eta: 4:02:21  epoch/iter: 27/11199  total_loss: 2.073  time: 0.5017  data_time: 0.0016  lr: 2.54e-03  max_mem: 5104M
+[06/17 04:54:17] fastreid.utils.events INFO:  eta: 4:01:05  epoch/iter: 27/11311  total_loss: 2.06  time: 0.5017  data_time: 0.0011  lr: 2.54e-03  max_mem: 5104M
+[06/17 04:55:01] fastreid.utils.events INFO:  eta: 4:00:22  epoch/iter: 28/11399  total_loss: 2.069  time: 0.5017  data_time: 0.0007  lr: 2.50e-03  max_mem: 5104M
+[06/17 04:56:42] fastreid.utils.events INFO:  eta: 3:58:56  epoch/iter: 28/11599  total_loss: 2.073  time: 0.5018  data_time: 0.0015  lr: 2.50e-03  max_mem: 5104M
+[06/17 04:57:41] fastreid.utils.events INFO:  eta: 3:58:10  epoch/iter: 28/11715  total_loss: 2.052  time: 0.5018  data_time: 0.0009  lr: 2.50e-03  max_mem: 5104M
+[06/17 04:58:23] fastreid.utils.events INFO:  eta: 3:57:22  epoch/iter: 29/11799  total_loss: 2.061  time: 0.5018  data_time: 0.0005  lr: 2.47e-03  max_mem: 5104M
+[06/17 05:00:04] fastreid.utils.events INFO:  eta: 3:55:27  epoch/iter: 29/11999  total_loss: 2.031  time: 0.5018  data_time: 0.0014  lr: 2.47e-03  max_mem: 5104M
+[06/17 05:01:04] fastreid.utils.events INFO:  eta: 3:54:34  epoch/iter: 29/12119  total_loss: 2.034  time: 0.5018  data_time: 0.0008  lr: 2.47e-03  max_mem: 5104M
+[06/17 05:01:44] fastreid.utils.events INFO:  eta: 3:53:52  epoch/iter: 30/12199  total_loss: 2.061  time: 0.5018  data_time: 0.0008  lr: 2.43e-03  max_mem: 5104M
+[06/17 05:03:25] fastreid.utils.events INFO:  eta: 3:52:22  epoch/iter: 30/12399  total_loss: 2.009  time: 0.5019  data_time: 0.0012  lr: 2.43e-03  max_mem: 5104M
+[06/17 05:04:28] fastreid.utils.events INFO:  eta: 3:51:27  epoch/iter: 30/12523  total_loss: 2.041  time: 0.5019  data_time: 0.0006  lr: 2.43e-03  max_mem: 5104M
+[06/17 05:05:07] fastreid.utils.events INFO:  eta: 3:50:46  epoch/iter: 31/12599  total_loss: 2.058  time: 0.5019  data_time: 0.0019  lr: 2.39e-03  max_mem: 5104M
+[06/17 05:06:47] fastreid.utils.events INFO:  eta: 3:49:06  epoch/iter: 31/12799  total_loss: 2.018  time: 0.5020  data_time: 0.0010  lr: 2.39e-03  max_mem: 5104M
+[06/17 05:07:52] fastreid.utils.events INFO:  eta: 3:48:24  epoch/iter: 31/12927  total_loss: 2.046  time: 0.5020  data_time: 0.0005  lr: 2.39e-03  max_mem: 5104M
+[06/17 05:08:29] fastreid.utils.events INFO:  eta: 3:48:08  epoch/iter: 32/12999  total_loss: 2.05  time: 0.5020  data_time: 0.0018  lr: 2.35e-03  max_mem: 5104M
+[06/17 05:10:10] fastreid.utils.events INFO:  eta: 3:46:48  epoch/iter: 32/13199  total_loss: 2.012  time: 0.5021  data_time: 0.0009  lr: 2.35e-03  max_mem: 5104M
+[06/17 05:11:17] fastreid.utils.events INFO:  eta: 3:45:42  epoch/iter: 32/13331  total_loss: 2.036  time: 0.5021  data_time: 0.0019  lr: 2.35e-03  max_mem: 5104M
+[06/17 05:11:51] fastreid.utils.events INFO:  eta: 3:44:57  epoch/iter: 33/13399  total_loss: 2.026  time: 0.5021  data_time: 0.0017  lr: 2.31e-03  max_mem: 5104M
+[06/17 05:13:32] fastreid.utils.events INFO:  eta: 3:43:01  epoch/iter: 33/13599  total_loss: 2.001  time: 0.5021  data_time: 0.0007  lr: 2.31e-03  max_mem: 5104M
+[06/17 05:14:41] fastreid.utils.events INFO:  eta: 3:42:04  epoch/iter: 33/13735  total_loss: 2.035  time: 0.5022  data_time: 0.0018  lr: 2.31e-03  max_mem: 5104M
+[06/17 05:15:13] fastreid.utils.events INFO:  eta: 3:41:30  epoch/iter: 34/13799  total_loss: 2.023  time: 0.5022  data_time: 0.0015  lr: 2.27e-03  max_mem: 5104M
+[06/17 05:16:54] fastreid.utils.events INFO:  eta: 3:39:22  epoch/iter: 34/13999  total_loss: 2.02  time: 0.5022  data_time: 0.0006  lr: 2.27e-03  max_mem: 5104M
+[06/17 05:18:04] fastreid.utils.events INFO:  eta: 3:37:55  epoch/iter: 34/14139  total_loss: 2.017  time: 0.5022  data_time: 0.0017  lr: 2.27e-03  max_mem: 5104M
+[06/17 05:18:35] fastreid.utils.events INFO:  eta: 3:37:24  epoch/iter: 35/14199  total_loss: 2.004  time: 0.5022  data_time: 0.0014  lr: 2.23e-03  max_mem: 5104M
+[06/17 05:20:16] fastreid.utils.events INFO:  eta: 3:35:51  epoch/iter: 35/14399  total_loss: 2.003  time: 0.5023  data_time: 0.0005  lr: 2.23e-03  max_mem: 5104M
+[06/17 05:21:28] fastreid.utils.events INFO:  eta: 3:34:49  epoch/iter: 35/14543  total_loss: 2.003  time: 0.5023  data_time: 0.0016  lr: 2.23e-03  max_mem: 5104M
+[06/17 05:21:56] fastreid.utils.events INFO:  eta: 3:34:19  epoch/iter: 36/14599  total_loss: 1.991  time: 0.5023  data_time: 0.0013  lr: 2.19e-03  max_mem: 5104M
+[06/17 05:23:37] fastreid.utils.events INFO:  eta: 3:32:32  epoch/iter: 36/14799  total_loss: 2.016  time: 0.5023  data_time: 0.0014  lr: 2.19e-03  max_mem: 5104M
+[06/17 05:24:51] fastreid.utils.events INFO:  eta: 3:31:17  epoch/iter: 36/14947  total_loss: 1.99  time: 0.5023  data_time: 0.0014  lr: 2.19e-03  max_mem: 5104M
+[06/17 05:25:17] fastreid.utils.events INFO:  eta: 3:30:48  epoch/iter: 37/14999  total_loss: 1.976  time: 0.5023  data_time: 0.0011  lr: 2.14e-03  max_mem: 5104M
+[06/17 05:26:58] fastreid.utils.events INFO:  eta: 3:29:10  epoch/iter: 37/15199  total_loss: 2.002  time: 0.5023  data_time: 0.0018  lr: 2.14e-03  max_mem: 5104M
+[06/17 05:28:15] fastreid.utils.events INFO:  eta: 3:27:53  epoch/iter: 37/15351  total_loss: 1.975  time: 0.5023  data_time: 0.0013  lr: 2.14e-03  max_mem: 5104M
+[06/17 05:28:39] fastreid.utils.events INFO:  eta: 3:27:25  epoch/iter: 38/15399  total_loss: 1.973  time: 0.5023  data_time: 0.0011  lr: 2.10e-03  max_mem: 5104M
+[06/17 05:30:20] fastreid.utils.events INFO:  eta: 3:25:41  epoch/iter: 38/15599  total_loss: 1.992  time: 0.5023  data_time: 0.0017  lr: 2.10e-03  max_mem: 5104M
+[06/17 05:31:38] fastreid.utils.events INFO:  eta: 3:24:19  epoch/iter: 38/15755  total_loss: 1.968  time: 0.5024  data_time: 0.0011  lr: 2.10e-03  max_mem: 5104M
+[06/17 05:32:00] fastreid.utils.events INFO:  eta: 3:24:00  epoch/iter: 39/15799  total_loss: 1.976  time: 0.5024  data_time: 0.0008  lr: 2.06e-03  max_mem: 5104M
+[06/17 05:33:41] fastreid.utils.events INFO:  eta: 3:22:33  epoch/iter: 39/15999  total_loss: 1.985  time: 0.5024  data_time: 0.0016  lr: 2.06e-03  max_mem: 5104M
+[06/17 05:35:02] fastreid.utils.events INFO:  eta: 3:21:13  epoch/iter: 39/16159  total_loss: 1.965  time: 0.5024  data_time: 0.0009  lr: 2.06e-03  max_mem: 5104M
+[06/17 05:35:22] fastreid.utils.events INFO:  eta: 3:20:54  epoch/iter: 40/16199  total_loss: 1.968  time: 0.5024  data_time: 0.0007  lr: 2.01e-03  max_mem: 5104M
+[06/17 05:37:03] fastreid.utils.events INFO:  eta: 3:19:12  epoch/iter: 40/16399  total_loss: 1.977  time: 0.5024  data_time: 0.0015  lr: 2.01e-03  max_mem: 5104M
+[06/17 05:38:26] fastreid.utils.events INFO:  eta: 3:17:51  epoch/iter: 40/16563  total_loss: 1.965  time: 0.5024  data_time: 0.0008  lr: 2.01e-03  max_mem: 5104M
+[06/17 05:38:44] fastreid.utils.events INFO:  eta: 3:17:32  epoch/iter: 41/16599  total_loss: 1.974  time: 0.5024  data_time: 0.0006  lr: 1.96e-03  max_mem: 5104M
+[06/17 05:40:25] fastreid.utils.events INFO:  eta: 3:15:54  epoch/iter: 41/16799  total_loss: 1.97  time: 0.5024  data_time: 0.0014  lr: 1.96e-03  max_mem: 5104M
+[06/17 05:41:50] fastreid.utils.events INFO:  eta: 3:14:31  epoch/iter: 41/16967  total_loss: 1.972  time: 0.5025  data_time: 0.0006  lr: 1.96e-03  max_mem: 5104M
+[06/17 05:42:06] fastreid.utils.events INFO:  eta: 3:14:14  epoch/iter: 42/16999  total_loss: 1.982  time: 0.5025  data_time: 0.0004  lr: 1.92e-03  max_mem: 5104M
+[06/17 05:43:47] fastreid.utils.events INFO:  eta: 3:12:43  epoch/iter: 42/17199  total_loss: 1.945  time: 0.5025  data_time: 0.0012  lr: 1.92e-03  max_mem: 5104M
+[06/17 05:45:14] fastreid.utils.events INFO:  eta: 3:11:25  epoch/iter: 42/17371  total_loss: 1.962  time: 0.5025  data_time: 0.0004  lr: 1.92e-03  max_mem: 5104M
+[06/17 05:45:28] fastreid.utils.events INFO:  eta: 3:11:13  epoch/iter: 43/17399  total_loss: 1.969  time: 0.5025  data_time: 0.0019  lr: 1.87e-03  max_mem: 5104M
+[06/17 05:47:09] fastreid.utils.events INFO:  eta: 3:09:38  epoch/iter: 43/17599  total_loss: 1.943  time: 0.5026  data_time: 0.0011  lr: 1.87e-03  max_mem: 5104M
+[06/17 05:48:37] fastreid.utils.events INFO:  eta: 3:08:02  epoch/iter: 43/17775  total_loss: 1.97  time: 0.5026  data_time: 0.0019  lr: 1.87e-03  max_mem: 5104M
+[06/17 05:48:49] fastreid.utils.events INFO:  eta: 3:07:53  epoch/iter: 44/17799  total_loss: 1.969  time: 0.5026  data_time: 0.0018  lr: 1.83e-03  max_mem: 5104M
+[06/17 05:50:30] fastreid.utils.events INFO:  eta: 3:06:08  epoch/iter: 44/17999  total_loss: 1.941  time: 0.5026  data_time: 0.0009  lr: 1.83e-03  max_mem: 5104M
+[06/17 05:52:02] fastreid.utils.events INFO:  eta: 3:04:56  epoch/iter: 44/18179  total_loss: 1.961  time: 0.5026  data_time: 0.0018  lr: 1.83e-03  max_mem: 5104M
+[06/17 05:52:12] fastreid.utils.events INFO:  eta: 3:04:43  epoch/iter: 45/18199  total_loss: 1.959  time: 0.5026  data_time: 0.0018  lr: 1.78e-03  max_mem: 5104M
+[06/17 05:53:53] fastreid.utils.events INFO:  eta: 3:03:00  epoch/iter: 45/18399  total_loss: 1.945  time: 0.5026  data_time: 0.0008  lr: 1.78e-03  max_mem: 5104M
+[06/17 05:55:25] fastreid.utils.events INFO:  eta: 3:01:09  epoch/iter: 45/18583  total_loss: 1.955  time: 0.5026  data_time: 0.0017  lr: 1.78e-03  max_mem: 5104M
+[06/17 05:55:33] fastreid.utils.events INFO:  eta: 3:01:00  epoch/iter: 46/18599  total_loss: 1.952  time: 0.5026  data_time: 0.0016  lr: 1.73e-03  max_mem: 5104M
+[06/17 05:57:14] fastreid.utils.events INFO:  eta: 2:59:36  epoch/iter: 46/18799  total_loss: 1.943  time: 0.5027  data_time: 0.0007  lr: 1.73e-03  max_mem: 5104M
+[06/17 05:58:49] fastreid.utils.events INFO:  eta: 2:58:06  epoch/iter: 46/18987  total_loss: 1.941  time: 0.5027  data_time: 0.0015  lr: 1.73e-03  max_mem: 5104M
+[06/17 05:58:55] fastreid.utils.events INFO:  eta: 2:58:01  epoch/iter: 47/18999  total_loss: 1.939  time: 0.5027  data_time: 0.0014  lr: 1.68e-03  max_mem: 5104M
+[06/17 06:00:37] fastreid.utils.events INFO:  eta: 2:56:14  epoch/iter: 47/19199  total_loss: 1.938  time: 0.5027  data_time: 0.0005  lr: 1.68e-03  max_mem: 5104M
+[06/17 06:02:14] fastreid.utils.events INFO:  eta: 2:54:42  epoch/iter: 47/19391  total_loss: 1.932  time: 0.5028  data_time: 0.0013  lr: 1.68e-03  max_mem: 5104M
+[06/17 06:02:18] fastreid.utils.events INFO:  eta: 2:54:39  epoch/iter: 48/19399  total_loss: 1.931  time: 0.5028  data_time: 0.0013  lr: 1.64e-03  max_mem: 5104M
+[06/17 06:03:59] fastreid.utils.events INFO:  eta: 2:53:11  epoch/iter: 48/19599  total_loss: 1.942  time: 0.5028  data_time: 0.0010  lr: 1.64e-03  max_mem: 5104M
+[06/17 06:05:38] fastreid.utils.events INFO:  eta: 2:51:25  epoch/iter: 48/19795  total_loss: 1.924  time: 0.5028  data_time: 0.0012  lr: 1.64e-03  max_mem: 5104M
+[06/17 06:05:40] fastreid.utils.events INFO:  eta: 2:51:24  epoch/iter: 49/19799  total_loss: 1.924  time: 0.5028  data_time: 0.0013  lr: 1.59e-03  max_mem: 5104M
+[06/17 06:07:21] fastreid.utils.events INFO:  eta: 2:49:30  epoch/iter: 49/19999  total_loss: 1.946  time: 0.5028  data_time: 0.0019  lr: 1.59e-03  max_mem: 5104M
+[06/17 06:09:02] fastreid.utils.events INFO:  eta: 2:47:55  epoch/iter: 49/20199  total_loss: 1.912  time: 0.5029  data_time: 0.0010  lr: 1.59e-03  max_mem: 5104M
+[06/17 06:09:02] fastreid.engine.defaults INFO: Prepare testing set
+[06/17 06:09:02] fastreid.data.datasets.bases INFO: => Loaded InShop in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 3985    | 14218      | 1           |
+| gallery  | 3985    | 12612      | 1           |[0m
+[06/17 06:09:02] fastreid.evaluation.evaluator INFO: Start inference on 26830 images
+[06/17 06:09:04] fastreid.evaluation.evaluator INFO: Inference done 11/420. 0.1472 s / batch. ETA=0:01:00
+[06/17 06:09:34] fastreid.evaluation.evaluator INFO: Inference done 212/420. 0.1487 s / batch. ETA=0:00:31
+[06/17 06:10:04] fastreid.evaluation.evaluator INFO: Inference done 416/420. 0.1473 s / batch. ETA=0:00:00
+[06/17 06:10:05] fastreid.evaluation.evaluator INFO: Total inference time: 0:01:01.627187 (0.148499 s / batch per device, on 1 devices)
+[06/17 06:10:05] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:01:01 (0.146993 s / batch per device, on 1 devices)
+[06/17 06:10:06] fastreid.engine.defaults INFO: Evaluation results for InShop in csv format:
+[06/17 06:10:06] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@10   | Recall@20   | Recall@30   | Recall@40   | Recall@50   | metric   |
+|:----------|:-----------|:------------|:------------|:------------|:------------|:------------|:---------|
+| InShop    | 90.60      | 98.00       | 98.69       | 98.97       | 99.16       | 99.27       | 90.60    |[0m
+[06/17 06:10:06] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_inshop/model_best.pth
+[06/17 06:10:06] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_inshop/model_0049.pth
+[06/17 06:10:07] fastreid.utils.events INFO:  eta: 2:47:55  epoch/iter: 49/20199  total_loss: 1.912  time: 0.5029  data_time: 0.0010  lr: 1.59e-03  max_mem: 5104M
+[06/17 06:11:48] fastreid.utils.events INFO:  eta: 2:46:31  epoch/iter: 50/20399  total_loss: 1.939  time: 0.5029  data_time: 0.0018  lr: 1.54e-03  max_mem: 5104M
+[06/17 06:13:30] fastreid.utils.events INFO:  eta: 2:45:03  epoch/iter: 50/20599  total_loss: 1.915  time: 0.5029  data_time: 0.0009  lr: 1.54e-03  max_mem: 5104M
+[06/17 06:13:32] fastreid.utils.events INFO:  eta: 2:45:02  epoch/iter: 50/20603  total_loss: 1.916  time: 0.5030  data_time: 0.0010  lr: 1.54e-03  max_mem: 5104M
+[06/17 06:15:11] fastreid.utils.events INFO:  eta: 2:43:29  epoch/iter: 51/20799  total_loss: 1.934  time: 0.5030  data_time: 0.0016  lr: 1.49e-03  max_mem: 5104M
+[06/17 06:16:53] fastreid.utils.events INFO:  eta: 2:42:14  epoch/iter: 51/20999  total_loss: 1.911  time: 0.5030  data_time: 0.0008  lr: 1.49e-03  max_mem: 5104M
+[06/17 06:16:57] fastreid.utils.events INFO:  eta: 2:42:10  epoch/iter: 51/21007  total_loss: 1.911  time: 0.5030  data_time: 0.0008  lr: 1.49e-03  max_mem: 5104M
+[06/17 06:18:34] fastreid.utils.events INFO:  eta: 2:40:22  epoch/iter: 52/21199  total_loss: 1.929  time: 0.5030  data_time: 0.0015  lr: 1.44e-03  max_mem: 5104M
+[06/17 06:20:15] fastreid.utils.events INFO:  eta: 2:38:17  epoch/iter: 52/21399  total_loss: 1.916  time: 0.5030  data_time: 0.0006  lr: 1.44e-03  max_mem: 5104M
+[06/17 06:20:21] fastreid.utils.events INFO:  eta: 2:38:08  epoch/iter: 52/21411  total_loss: 1.921  time: 0.5030  data_time: 0.0005  lr: 1.44e-03  max_mem: 5104M
+[06/17 06:21:56] fastreid.utils.events INFO:  eta: 2:36:16  epoch/iter: 53/21599  total_loss: 1.91  time: 0.5031  data_time: 0.0014  lr: 1.39e-03  max_mem: 5104M
+[06/17 06:23:37] fastreid.utils.events INFO:  eta: 2:34:42  epoch/iter: 53/21799  total_loss: 1.911  time: 0.5031  data_time: 0.0004  lr: 1.39e-03  max_mem: 5104M
+[06/17 06:23:45] fastreid.utils.events INFO:  eta: 2:34:34  epoch/iter: 53/21815  total_loss: 1.917  time: 0.5031  data_time: 0.0008  lr: 1.39e-03  max_mem: 5104M
+[06/17 06:25:18] fastreid.utils.events INFO:  eta: 2:32:59  epoch/iter: 54/21999  total_loss: 1.9  time: 0.5031  data_time: 0.0012  lr: 1.35e-03  max_mem: 5104M
+[06/17 06:26:59] fastreid.utils.events INFO:  eta: 2:31:16  epoch/iter: 54/22199  total_loss: 1.921  time: 0.5031  data_time: 0.0019  lr: 1.35e-03  max_mem: 5104M
+[06/17 06:27:09] fastreid.utils.events INFO:  eta: 2:31:06  epoch/iter: 54/22219  total_loss: 1.921  time: 0.5031  data_time: 0.0018  lr: 1.35e-03  max_mem: 5104M
+[06/17 06:28:40] fastreid.utils.events INFO:  eta: 2:29:39  epoch/iter: 55/22399  total_loss: 1.899  time: 0.5031  data_time: 0.0011  lr: 1.30e-03  max_mem: 5104M
+[06/17 06:30:21] fastreid.utils.events INFO:  eta: 2:28:07  epoch/iter: 55/22599  total_loss: 1.918  time: 0.5032  data_time: 0.0018  lr: 1.30e-03  max_mem: 5104M
+[06/17 06:30:34] fastreid.utils.events INFO:  eta: 2:27:57  epoch/iter: 55/22623  total_loss: 1.918  time: 0.5032  data_time: 0.0017  lr: 1.30e-03  max_mem: 5104M
+[06/17 06:32:02] fastreid.utils.events INFO:  eta: 2:26:24  epoch/iter: 56/22799  total_loss: 1.887  time: 0.5032  data_time: 0.0010  lr: 1.25e-03  max_mem: 5104M
+[06/17 06:33:44] fastreid.utils.events INFO:  eta: 2:24:45  epoch/iter: 56/22999  total_loss: 1.912  time: 0.5032  data_time: 0.0017  lr: 1.25e-03  max_mem: 5104M
+[06/17 06:33:58] fastreid.utils.events INFO:  eta: 2:24:33  epoch/iter: 56/23027  total_loss: 1.906  time: 0.5032  data_time: 0.0015  lr: 1.25e-03  max_mem: 5104M
+[06/17 06:35:25] fastreid.utils.events INFO:  eta: 2:23:10  epoch/iter: 57/23199  total_loss: 1.891  time: 0.5032  data_time: 0.0008  lr: 1.20e-03  max_mem: 5104M
+[06/17 06:37:05] fastreid.utils.events INFO:  eta: 2:21:27  epoch/iter: 57/23399  total_loss: 1.895  time: 0.5032  data_time: 0.0016  lr: 1.20e-03  max_mem: 5104M
+[06/17 06:37:21] fastreid.utils.events INFO:  eta: 2:21:08  epoch/iter: 57/23431  total_loss: 1.894  time: 0.5032  data_time: 0.0014  lr: 1.20e-03  max_mem: 5104M
+[06/17 06:38:46] fastreid.utils.events INFO:  eta: 2:19:41  epoch/iter: 58/23599  total_loss: 1.89  time: 0.5032  data_time: 0.0007  lr: 1.16e-03  max_mem: 5104M
+[06/17 06:40:28] fastreid.utils.events INFO:  eta: 2:18:05  epoch/iter: 58/23799  total_loss: 1.9  time: 0.5033  data_time: 0.0014  lr: 1.16e-03  max_mem: 5104M
+[06/17 06:40:46] fastreid.utils.events INFO:  eta: 2:17:47  epoch/iter: 58/23835  total_loss: 1.895  time: 0.5033  data_time: 0.0013  lr: 1.16e-03  max_mem: 5104M
+[06/17 06:42:08] fastreid.utils.events INFO:  eta: 2:16:18  epoch/iter: 59/23999  total_loss: 1.897  time: 0.5033  data_time: 0.0005  lr: 1.11e-03  max_mem: 5104M
+[06/17 06:43:49] fastreid.utils.events INFO:  eta: 2:14:33  epoch/iter: 59/24199  total_loss: 1.885  time: 0.5033  data_time: 0.0013  lr: 1.11e-03  max_mem: 5104M
+[06/17 06:44:09] fastreid.utils.events INFO:  eta: 2:14:12  epoch/iter: 59/24239  total_loss: 1.871  time: 0.5033  data_time: 0.0011  lr: 1.11e-03  max_mem: 5104M
+[06/17 06:45:30] fastreid.utils.events INFO:  eta: 2:12:59  epoch/iter: 60/24399  total_loss: 1.89  time: 0.5033  data_time: 0.0006  lr: 1.07e-03  max_mem: 5104M
+[06/17 06:47:11] fastreid.utils.events INFO:  eta: 2:11:21  epoch/iter: 60/24599  total_loss: 1.868  time: 0.5033  data_time: 0.0012  lr: 1.07e-03  max_mem: 5104M
+[06/17 06:47:34] fastreid.utils.events INFO:  eta: 2:11:00  epoch/iter: 60/24643  total_loss: 1.87  time: 0.5033  data_time: 0.0010  lr: 1.07e-03  max_mem: 5104M
+[06/17 06:48:52] fastreid.utils.events INFO:  eta: 2:09:35  epoch/iter: 61/24799  total_loss: 1.895  time: 0.5033  data_time: 0.0018  lr: 1.02e-03  max_mem: 5104M
+[06/17 06:50:34] fastreid.utils.events INFO:  eta: 2:08:03  epoch/iter: 61/24999  total_loss: 1.876  time: 0.5033  data_time: 0.0010  lr: 1.02e-03  max_mem: 5104M
+[06/17 06:50:58] fastreid.utils.events INFO:  eta: 2:07:37  epoch/iter: 61/25047  total_loss: 1.878  time: 0.5033  data_time: 0.0008  lr: 1.02e-03  max_mem: 5104M
+[06/17 06:52:15] fastreid.utils.events INFO:  eta: 2:06:32  epoch/iter: 62/25199  total_loss: 1.889  time: 0.5033  data_time: 0.0017  lr: 9.75e-04  max_mem: 5104M
+[06/17 06:53:56] fastreid.utils.events INFO:  eta: 2:04:52  epoch/iter: 62/25399  total_loss: 1.881  time: 0.5034  data_time: 0.0009  lr: 9.75e-04  max_mem: 5104M
+[06/17 06:54:22] fastreid.utils.events INFO:  eta: 2:04:24  epoch/iter: 62/25451  total_loss: 1.884  time: 0.5034  data_time: 0.0007  lr: 9.75e-04  max_mem: 5104M
+[06/17 06:55:37] fastreid.utils.events INFO:  eta: 2:03:12  epoch/iter: 63/25599  total_loss: 1.892  time: 0.5034  data_time: 0.0017  lr: 9.30e-04  max_mem: 5104M
+[06/17 06:57:18] fastreid.utils.events INFO:  eta: 2:01:28  epoch/iter: 63/25799  total_loss: 1.874  time: 0.5034  data_time: 0.0007  lr: 9.30e-04  max_mem: 5104M
+[06/17 06:57:46] fastreid.utils.events INFO:  eta: 2:00:56  epoch/iter: 63/25855  total_loss: 1.875  time: 0.5034  data_time: 0.0005  lr: 9.30e-04  max_mem: 5104M
+[06/17 06:58:58] fastreid.utils.events INFO:  eta: 1:59:45  epoch/iter: 64/25999  total_loss: 1.873  time: 0.5034  data_time: 0.0015  lr: 8.86e-04  max_mem: 5104M
+[06/17 07:00:39] fastreid.utils.events INFO:  eta: 1:57:57  epoch/iter: 64/26199  total_loss: 1.875  time: 0.5034  data_time: 0.0006  lr: 8.86e-04  max_mem: 5104M
+[06/17 07:01:10] fastreid.utils.events INFO:  eta: 1:57:26  epoch/iter: 64/26259  total_loss: 1.886  time: 0.5034  data_time: 0.0014  lr: 8.86e-04  max_mem: 5104M
+[06/17 07:02:20] fastreid.utils.events INFO:  eta: 1:56:16  epoch/iter: 65/26399  total_loss: 1.879  time: 0.5034  data_time: 0.0013  lr: 8.43e-04  max_mem: 5104M
+[06/17 07:04:01] fastreid.utils.events INFO:  eta: 1:54:36  epoch/iter: 65/26599  total_loss: 1.875  time: 0.5034  data_time: 0.0005  lr: 8.43e-04  max_mem: 5104M
+[06/17 07:04:34] fastreid.utils.events INFO:  eta: 1:54:05  epoch/iter: 65/26663  total_loss: 1.883  time: 0.5034  data_time: 0.0019  lr: 8.43e-04  max_mem: 5104M
+[06/17 07:05:42] fastreid.utils.events INFO:  eta: 1:52:59  epoch/iter: 66/26799  total_loss: 1.871  time: 0.5034  data_time: 0.0013  lr: 8.00e-04  max_mem: 5104M
+[06/17 07:07:23] fastreid.utils.events INFO:  eta: 1:51:15  epoch/iter: 66/26999  total_loss: 1.882  time: 0.5034  data_time: 0.0013  lr: 8.00e-04  max_mem: 5104M
+[06/17 07:07:57] fastreid.utils.events INFO:  eta: 1:50:41  epoch/iter: 66/27067  total_loss: 1.883  time: 0.5034  data_time: 0.0017  lr: 8.00e-04  max_mem: 5104M
+[06/17 07:09:04] fastreid.utils.events INFO:  eta: 1:49:35  epoch/iter: 67/27199  total_loss: 1.86  time: 0.5034  data_time: 0.0012  lr: 7.59e-04  max_mem: 5104M
+[06/17 07:10:45] fastreid.utils.events INFO:  eta: 1:47:56  epoch/iter: 67/27399  total_loss: 1.873  time: 0.5034  data_time: 0.0019  lr: 7.59e-04  max_mem: 5104M
+[06/17 07:11:21] fastreid.utils.events INFO:  eta: 1:47:22  epoch/iter: 67/27471  total_loss: 1.876  time: 0.5034  data_time: 0.0016  lr: 7.59e-04  max_mem: 5104M
+[06/17 07:12:26] fastreid.utils.events INFO:  eta: 1:46:21  epoch/iter: 68/27599  total_loss: 1.863  time: 0.5034  data_time: 0.0011  lr: 7.18e-04  max_mem: 5104M
+[06/17 07:14:07] fastreid.utils.events INFO:  eta: 1:44:43  epoch/iter: 68/27799  total_loss: 1.866  time: 0.5034  data_time: 0.0018  lr: 7.18e-04  max_mem: 5104M
+[06/17 07:14:45] fastreid.utils.events INFO:  eta: 1:44:10  epoch/iter: 68/27875  total_loss: 1.866  time: 0.5034  data_time: 0.0014  lr: 7.18e-04  max_mem: 5104M
+[06/17 07:15:48] fastreid.utils.events INFO:  eta: 1:43:14  epoch/iter: 69/27999  total_loss: 1.861  time: 0.5035  data_time: 0.0009  lr: 6.78e-04  max_mem: 5104M
+[06/17 07:17:30] fastreid.utils.events INFO:  eta: 1:41:43  epoch/iter: 69/28199  total_loss: 1.872  time: 0.5035  data_time: 0.0017  lr: 6.78e-04  max_mem: 5104M
+[06/17 07:18:11] fastreid.utils.events INFO:  eta: 1:41:06  epoch/iter: 69/28279  total_loss: 1.867  time: 0.5035  data_time: 0.0013  lr: 6.78e-04  max_mem: 5104M
+[06/17 07:19:11] fastreid.utils.events INFO:  eta: 1:40:12  epoch/iter: 70/28399  total_loss: 1.862  time: 0.5035  data_time: 0.0007  lr: 6.38e-04  max_mem: 5104M
+[06/17 07:20:53] fastreid.utils.events INFO:  eta: 1:38:36  epoch/iter: 70/28599  total_loss: 1.861  time: 0.5035  data_time: 0.0015  lr: 6.38e-04  max_mem: 5104M
+[06/17 07:21:35] fastreid.utils.events INFO:  eta: 1:37:53  epoch/iter: 70/28683  total_loss: 1.851  time: 0.5035  data_time: 0.0011  lr: 6.38e-04  max_mem: 5104M
+[06/17 07:22:34] fastreid.utils.events INFO:  eta: 1:36:55  epoch/iter: 71/28799  total_loss: 1.86  time: 0.5035  data_time: 0.0006  lr: 6.00e-04  max_mem: 5104M
+[06/17 07:24:15] fastreid.utils.events INFO:  eta: 1:35:15  epoch/iter: 71/28999  total_loss: 1.862  time: 0.5036  data_time: 0.0013  lr: 6.00e-04  max_mem: 5104M
+[06/17 07:25:00] fastreid.utils.events INFO:  eta: 1:34:31  epoch/iter: 71/29087  total_loss: 1.857  time: 0.5036  data_time: 0.0009  lr: 6.00e-04  max_mem: 5104M
+[06/17 07:25:57] fastreid.utils.events INFO:  eta: 1:33:31  epoch/iter: 72/29199  total_loss: 1.866  time: 0.5036  data_time: 0.0004  lr: 5.63e-04  max_mem: 5104M
+[06/17 07:27:38] fastreid.utils.events INFO:  eta: 1:31:48  epoch/iter: 72/29399  total_loss: 1.843  time: 0.5036  data_time: 0.0013  lr: 5.63e-04  max_mem: 5104M
+[06/17 07:28:25] fastreid.utils.events INFO:  eta: 1:31:02  epoch/iter: 72/29491  total_loss: 1.844  time: 0.5036  data_time: 0.0008  lr: 5.63e-04  max_mem: 5104M
+[06/17 07:29:20] fastreid.utils.events INFO:  eta: 1:30:07  epoch/iter: 73/29599  total_loss: 1.867  time: 0.5036  data_time: 0.0020  lr: 5.26e-04  max_mem: 5104M
+[06/17 07:31:01] fastreid.utils.events INFO:  eta: 1:28:33  epoch/iter: 73/29799  total_loss: 1.85  time: 0.5037  data_time: 0.0011  lr: 5.26e-04  max_mem: 5104M
+[06/17 07:31:50] fastreid.utils.events INFO:  eta: 1:27:46  epoch/iter: 73/29895  total_loss: 1.847  time: 0.5037  data_time: 0.0006  lr: 5.26e-04  max_mem: 5104M
+[06/17 07:32:42] fastreid.utils.events INFO:  eta: 1:26:47  epoch/iter: 74/29999  total_loss: 1.857  time: 0.5037  data_time: 0.0018  lr: 4.91e-04  max_mem: 5104M
+[06/17 07:34:24] fastreid.utils.events INFO:  eta: 1:25:07  epoch/iter: 74/30199  total_loss: 1.841  time: 0.5037  data_time: 0.0009  lr: 4.91e-04  max_mem: 5104M
+[06/17 07:35:14] fastreid.engine.defaults INFO: Prepare testing set
+[06/17 07:35:14] fastreid.data.datasets.bases INFO: => Loaded InShop in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 3985    | 14218      | 1           |
+| gallery  | 3985    | 12612      | 1           |[0m
+[06/17 07:35:14] fastreid.evaluation.evaluator INFO: Start inference on 26830 images
+[06/17 07:35:16] fastreid.evaluation.evaluator INFO: Inference done 11/420. 0.1598 s / batch. ETA=0:01:05
+[06/17 07:35:47] fastreid.evaluation.evaluator INFO: Inference done 212/420. 0.1483 s / batch. ETA=0:00:31
+[06/17 07:36:17] fastreid.evaluation.evaluator INFO: Inference done 418/420. 0.1465 s / batch. ETA=0:00:00
+[06/17 07:36:17] fastreid.evaluation.evaluator INFO: Total inference time: 0:01:01.280493 (0.147664 s / batch per device, on 1 devices)
+[06/17 07:36:17] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:01:00 (0.146170 s / batch per device, on 1 devices)
+[06/17 07:36:17] fastreid.engine.defaults INFO: Evaluation results for InShop in csv format:
+[06/17 07:36:17] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@10   | Recall@20   | Recall@30   | Recall@40   | Recall@50   | metric   |
+|:----------|:-----------|:------------|:------------|:------------|:------------|:------------|:---------|
+| InShop    | 92.05      | 98.40       | 98.96       | 99.12       | 99.29       | 99.35       | 92.05    |[0m
+[06/17 07:36:17] fastreid.utils.events INFO:  eta: 1:24:15  epoch/iter: 74/30299  total_loss: 1.846  time: 0.5037  data_time: 0.0005  lr: 4.91e-04  max_mem: 5104M
+[06/17 07:37:08] fastreid.utils.events INFO:  eta: 1:23:25  epoch/iter: 75/30399  total_loss: 1.855  time: 0.5037  data_time: 0.0017  lr: 4.56e-04  max_mem: 5104M
+[06/17 07:38:50] fastreid.utils.events INFO:  eta: 1:21:48  epoch/iter: 75/30599  total_loss: 1.845  time: 0.5037  data_time: 0.0009  lr: 4.56e-04  max_mem: 5104M
+[06/17 07:39:43] fastreid.utils.events INFO:  eta: 1:20:57  epoch/iter: 75/30703  total_loss: 1.856  time: 0.5037  data_time: 0.0017  lr: 4.56e-04  max_mem: 5104M
+[06/17 07:40:32] fastreid.utils.events INFO:  eta: 1:20:11  epoch/iter: 76/30799  total_loss: 1.856  time: 0.5038  data_time: 0.0016  lr: 4.23e-04  max_mem: 5104M
+[06/17 07:42:13] fastreid.utils.events INFO:  eta: 1:18:31  epoch/iter: 76/30999  total_loss: 1.847  time: 0.5038  data_time: 0.0007  lr: 4.23e-04  max_mem: 5104M
+[06/17 07:43:08] fastreid.utils.events INFO:  eta: 1:17:44  epoch/iter: 76/31107  total_loss: 1.859  time: 0.5038  data_time: 0.0018  lr: 4.23e-04  max_mem: 5104M
+[06/17 07:43:54] fastreid.utils.events INFO:  eta: 1:16:54  epoch/iter: 77/31199  total_loss: 1.848  time: 0.5038  data_time: 0.0015  lr: 3.91e-04  max_mem: 5104M
+[06/17 07:45:35] fastreid.utils.events INFO:  eta: 1:15:15  epoch/iter: 77/31399  total_loss: 1.846  time: 0.5038  data_time: 0.0006  lr: 3.91e-04  max_mem: 5104M
+[06/17 07:46:32] fastreid.utils.events INFO:  eta: 1:14:15  epoch/iter: 77/31511  total_loss: 1.861  time: 0.5038  data_time: 0.0017  lr: 3.91e-04  max_mem: 5104M
+[06/17 07:47:17] fastreid.utils.events INFO:  eta: 1:13:30  epoch/iter: 78/31599  total_loss: 1.849  time: 0.5038  data_time: 0.0013  lr: 3.60e-04  max_mem: 5104M
+[06/17 07:48:58] fastreid.utils.events INFO:  eta: 1:11:42  epoch/iter: 78/31799  total_loss: 1.844  time: 0.5038  data_time: 0.0004  lr: 3.60e-04  max_mem: 5104M
+[06/17 07:49:56] fastreid.utils.events INFO:  eta: 1:10:42  epoch/iter: 78/31915  total_loss: 1.85  time: 0.5038  data_time: 0.0016  lr: 3.60e-04  max_mem: 5104M
+[06/17 07:50:39] fastreid.utils.events INFO:  eta: 1:10:00  epoch/iter: 79/31999  total_loss: 1.84  time: 0.5038  data_time: 0.0013  lr: 3.31e-04  max_mem: 5104M
+[06/17 07:52:20] fastreid.utils.events INFO:  eta: 1:08:17  epoch/iter: 79/32199  total_loss: 1.855  time: 0.5039  data_time: 0.0019  lr: 3.31e-04  max_mem: 5104M
+[06/17 07:53:20] fastreid.utils.events INFO:  eta: 1:07:14  epoch/iter: 79/32319  total_loss: 1.837  time: 0.5038  data_time: 0.0015  lr: 3.31e-04  max_mem: 5104M
+[06/17 07:54:01] fastreid.utils.events INFO:  eta: 1:06:37  epoch/iter: 80/32399  total_loss: 1.83  time: 0.5039  data_time: 0.0010  lr: 3.02e-04  max_mem: 5104M
+[06/17 07:55:42] fastreid.utils.events INFO:  eta: 1:04:54  epoch/iter: 80/32599  total_loss: 1.842  time: 0.5039  data_time: 0.0017  lr: 3.02e-04  max_mem: 5104M
+[06/17 07:56:45] fastreid.utils.events INFO:  eta: 1:03:56  epoch/iter: 80/32723  total_loss: 1.834  time: 0.5039  data_time: 0.0014  lr: 3.02e-04  max_mem: 5104M
+[06/17 07:57:24] fastreid.utils.events INFO:  eta: 1:03:21  epoch/iter: 81/32799  total_loss: 1.831  time: 0.5039  data_time: 0.0010  lr: 2.75e-04  max_mem: 5104M
+[06/17 07:59:05] fastreid.utils.events INFO:  eta: 1:01:43  epoch/iter: 81/32999  total_loss: 1.838  time: 0.5039  data_time: 0.0017  lr: 2.75e-04  max_mem: 5104M
+[06/17 08:00:10] fastreid.utils.events INFO:  eta: 1:00:40  epoch/iter: 81/33127  total_loss: 1.829  time: 0.5039  data_time: 0.0011  lr: 2.75e-04  max_mem: 5104M
+[06/17 08:00:47] fastreid.utils.events INFO:  eta: 1:00:03  epoch/iter: 82/33199  total_loss: 1.832  time: 0.5039  data_time: 0.0007  lr: 2.49e-04  max_mem: 5104M
+[06/17 08:02:27] fastreid.utils.events INFO:  eta: 0:58:22  epoch/iter: 82/33399  total_loss: 1.836  time: 0.5039  data_time: 0.0015  lr: 2.49e-04  max_mem: 5104M
+[06/17 08:03:34] fastreid.utils.events INFO:  eta: 0:57:15  epoch/iter: 82/33531  total_loss: 1.827  time: 0.5039  data_time: 0.0009  lr: 2.49e-04  max_mem: 5104M
+[06/17 08:04:08] fastreid.utils.events INFO:  eta: 0:56:40  epoch/iter: 83/33599  total_loss: 1.827  time: 0.5039  data_time: 0.0006  lr: 2.25e-04  max_mem: 5104M
+[06/17 08:05:50] fastreid.utils.events INFO:  eta: 0:54:58  epoch/iter: 83/33799  total_loss: 1.831  time: 0.5039  data_time: 0.0014  lr: 2.25e-04  max_mem: 5104M
+[06/17 08:06:58] fastreid.utils.events INFO:  eta: 0:53:47  epoch/iter: 83/33935  total_loss: 1.83  time: 0.5039  data_time: 0.0008  lr: 2.25e-04  max_mem: 5104M
+[06/17 08:07:31] fastreid.utils.events INFO:  eta: 0:53:15  epoch/iter: 84/33999  total_loss: 1.84  time: 0.5039  data_time: 0.0005  lr: 2.02e-04  max_mem: 5104M
+[06/17 08:09:12] fastreid.utils.events INFO:  eta: 0:51:35  epoch/iter: 84/34199  total_loss: 1.831  time: 0.5040  data_time: 0.0013  lr: 2.02e-04  max_mem: 5104M
+[06/17 08:10:23] fastreid.utils.events INFO:  eta: 0:50:29  epoch/iter: 84/34339  total_loss: 1.831  time: 0.5040  data_time: 0.0006  lr: 2.02e-04  max_mem: 5104M
+[06/17 08:10:54] fastreid.utils.events INFO:  eta: 0:50:00  epoch/iter: 85/34399  total_loss: 1.843  time: 0.5040  data_time: 0.0015  lr: 1.80e-04  max_mem: 5104M
+[06/17 08:12:35] fastreid.utils.events INFO:  eta: 0:48:21  epoch/iter: 85/34599  total_loss: 1.823  time: 0.5040  data_time: 0.0011  lr: 1.80e-04  max_mem: 5104M
+[06/17 08:13:47] fastreid.utils.events INFO:  eta: 0:47:07  epoch/iter: 85/34743  total_loss: 1.831  time: 0.5040  data_time: 0.0005  lr: 1.80e-04  max_mem: 5104M
+[06/17 08:14:16] fastreid.utils.events INFO:  eta: 0:46:40  epoch/iter: 86/34799  total_loss: 1.839  time: 0.5040  data_time: 0.0018  lr: 1.60e-04  max_mem: 5104M
+[06/17 08:15:57] fastreid.utils.events INFO:  eta: 0:45:01  epoch/iter: 86/34999  total_loss: 1.82  time: 0.5040  data_time: 0.0010  lr: 1.60e-04  max_mem: 5104M
+[06/17 08:17:12] fastreid.utils.events INFO:  eta: 0:43:48  epoch/iter: 86/35147  total_loss: 1.836  time: 0.5040  data_time: 0.0019  lr: 1.60e-04  max_mem: 5104M
+[06/17 08:17:38] fastreid.utils.events INFO:  eta: 0:43:22  epoch/iter: 87/35199  total_loss: 1.837  time: 0.5040  data_time: 0.0016  lr: 1.41e-04  max_mem: 5104M
+[06/17 08:19:19] fastreid.utils.events INFO:  eta: 0:41:39  epoch/iter: 87/35399  total_loss: 1.827  time: 0.5040  data_time: 0.0008  lr: 1.41e-04  max_mem: 5104M
+[06/17 08:20:36] fastreid.utils.events INFO:  eta: 0:40:22  epoch/iter: 87/35551  total_loss: 1.836  time: 0.5040  data_time: 0.0018  lr: 1.41e-04  max_mem: 5104M
+[06/17 08:21:00] fastreid.utils.events INFO:  eta: 0:39:58  epoch/iter: 88/35599  total_loss: 1.833  time: 0.5040  data_time: 0.0016  lr: 1.23e-04  max_mem: 5104M
+[06/17 08:22:42] fastreid.utils.events INFO:  eta: 0:38:20  epoch/iter: 88/35799  total_loss: 1.823  time: 0.5040  data_time: 0.0007  lr: 1.23e-04  max_mem: 5104M
+[06/17 08:24:01] fastreid.utils.events INFO:  eta: 0:37:02  epoch/iter: 88/35955  total_loss: 1.836  time: 0.5040  data_time: 0.0017  lr: 1.23e-04  max_mem: 5104M
+[06/17 08:24:23] fastreid.utils.events INFO:  eta: 0:36:40  epoch/iter: 89/35999  total_loss: 1.83  time: 0.5040  data_time: 0.0015  lr: 1.07e-04  max_mem: 5104M
+[06/17 08:26:05] fastreid.utils.events INFO:  eta: 0:35:01  epoch/iter: 89/36199  total_loss: 1.825  time: 0.5041  data_time: 0.0006  lr: 1.07e-04  max_mem: 5104M
+[06/17 08:27:26] fastreid.utils.events INFO:  eta: 0:33:42  epoch/iter: 89/36359  total_loss: 1.834  time: 0.5041  data_time: 0.0015  lr: 1.07e-04  max_mem: 5104M
+[06/17 08:27:46] fastreid.utils.events INFO:  eta: 0:33:21  epoch/iter: 90/36399  total_loss: 1.828  time: 0.5041  data_time: 0.0013  lr: 9.26e-05  max_mem: 5104M
+[06/17 08:29:27] fastreid.utils.events INFO:  eta: 0:31:42  epoch/iter: 90/36599  total_loss: 1.83  time: 0.5041  data_time: 0.0004  lr: 9.26e-05  max_mem: 5104M
+[06/17 08:30:50] fastreid.utils.events INFO:  eta: 0:30:20  epoch/iter: 90/36763  total_loss: 1.831  time: 0.5041  data_time: 0.0014  lr: 9.26e-05  max_mem: 5104M
+[06/17 08:31:08] fastreid.utils.events INFO:  eta: 0:30:01  epoch/iter: 91/36799  total_loss: 1.824  time: 0.5041  data_time: 0.0012  lr: 7.96e-05  max_mem: 5104M
+[06/17 08:32:49] fastreid.utils.events INFO:  eta: 0:28:20  epoch/iter: 91/36999  total_loss: 1.829  time: 0.5041  data_time: 0.0019  lr: 7.96e-05  max_mem: 5104M
+[06/17 08:34:14] fastreid.utils.events INFO:  eta: 0:26:55  epoch/iter: 91/37167  total_loss: 1.817  time: 0.5041  data_time: 0.0012  lr: 7.96e-05  max_mem: 5104M
+[06/17 08:34:31] fastreid.utils.events INFO:  eta: 0:26:39  epoch/iter: 92/37199  total_loss: 1.814  time: 0.5041  data_time: 0.0011  lr: 6.80e-05  max_mem: 5104M
+[06/17 08:36:11] fastreid.utils.events INFO:  eta: 0:24:58  epoch/iter: 92/37399  total_loss: 1.827  time: 0.5041  data_time: 0.0018  lr: 6.80e-05  max_mem: 5104M
+[06/17 08:37:38] fastreid.utils.events INFO:  eta: 0:23:30  epoch/iter: 92/37571  total_loss: 1.816  time: 0.5041  data_time: 0.0011  lr: 6.80e-05  max_mem: 5104M
+[06/17 08:37:52] fastreid.utils.events INFO:  eta: 0:23:16  epoch/iter: 93/37599  total_loss: 1.816  time: 0.5041  data_time: 0.0009  lr: 5.80e-05  max_mem: 5104M
+[06/17 08:39:33] fastreid.utils.events INFO:  eta: 0:21:37  epoch/iter: 93/37799  total_loss: 1.829  time: 0.5041  data_time: 0.0017  lr: 5.80e-05  max_mem: 5104M
+[06/17 08:41:02] fastreid.utils.events INFO:  eta: 0:20:10  epoch/iter: 93/37975  total_loss: 1.824  time: 0.5041  data_time: 0.0009  lr: 5.80e-05  max_mem: 5104M
+[06/17 08:41:14] fastreid.utils.events INFO:  eta: 0:19:58  epoch/iter: 94/37999  total_loss: 1.819  time: 0.5041  data_time: 0.0007  lr: 4.94e-05  max_mem: 5104M
+[06/17 08:42:56] fastreid.utils.events INFO:  eta: 0:18:19  epoch/iter: 94/38199  total_loss: 1.831  time: 0.5041  data_time: 0.0015  lr: 4.94e-05  max_mem: 5104M
+[06/17 08:44:27] fastreid.utils.events INFO:  eta: 0:16:50  epoch/iter: 94/38379  total_loss: 1.821  time: 0.5041  data_time: 0.0009  lr: 4.94e-05  max_mem: 5104M
+[06/17 08:44:37] fastreid.utils.events INFO:  eta: 0:16:40  epoch/iter: 95/38399  total_loss: 1.823  time: 0.5042  data_time: 0.0007  lr: 4.24e-05  max_mem: 5104M
+[06/17 08:46:19] fastreid.utils.events INFO:  eta: 0:15:01  epoch/iter: 95/38599  total_loss: 1.82  time: 0.5042  data_time: 0.0014  lr: 4.24e-05  max_mem: 5104M
+[06/17 08:47:52] fastreid.utils.events INFO:  eta: 0:13:30  epoch/iter: 95/38783  total_loss: 1.817  time: 0.5042  data_time: 0.0006  lr: 4.24e-05  max_mem: 5104M
+[06/17 08:48:01] fastreid.utils.events INFO:  eta: 0:13:22  epoch/iter: 96/38799  total_loss: 1.818  time: 0.5042  data_time: 0.0005  lr: 3.70e-05  max_mem: 5104M
+[06/17 08:49:42] fastreid.utils.events INFO:  eta: 0:11:43  epoch/iter: 96/38999  total_loss: 1.819  time: 0.5042  data_time: 0.0014  lr: 3.70e-05  max_mem: 5104M
+[06/17 08:51:17] fastreid.utils.events INFO:  eta: 0:10:08  epoch/iter: 96/39187  total_loss: 1.818  time: 0.5042  data_time: 0.0004  lr: 3.70e-05  max_mem: 5104M
+[06/17 08:51:23] fastreid.utils.events INFO:  eta: 0:10:02  epoch/iter: 97/39199  total_loss: 1.825  time: 0.5042  data_time: 0.0007  lr: 3.31e-05  max_mem: 5104M
+[06/17 08:53:04] fastreid.utils.events INFO:  eta: 0:08:21  epoch/iter: 97/39399  total_loss: 1.812  time: 0.5042  data_time: 0.0012  lr: 3.31e-05  max_mem: 5104M
+[06/17 08:54:41] fastreid.utils.events INFO:  eta: 0:06:44  epoch/iter: 97/39591  total_loss: 1.829  time: 0.5042  data_time: 0.0018  lr: 3.31e-05  max_mem: 5104M
+[06/17 08:54:45] fastreid.utils.events INFO:  eta: 0:06:40  epoch/iter: 98/39599  total_loss: 1.83  time: 0.5042  data_time: 0.0018  lr: 3.08e-05  max_mem: 5104M
+[06/17 08:56:26] fastreid.utils.events INFO:  eta: 0:04:59  epoch/iter: 98/39799  total_loss: 1.814  time: 0.5042  data_time: 0.0010  lr: 3.08e-05  max_mem: 5104M
+[06/17 08:58:05] fastreid.utils.events INFO:  eta: 0:03:21  epoch/iter: 98/39995  total_loss: 1.826  time: 0.5042  data_time: 0.0017  lr: 3.08e-05  max_mem: 5104M
+[06/17 08:58:07] fastreid.utils.events INFO:  eta: 0:03:19  epoch/iter: 99/39999  total_loss: 1.826  time: 0.5042  data_time: 0.0017  lr: 3.00e-05  max_mem: 5104M
+[06/17 08:59:48] fastreid.utils.events INFO:  eta: 0:01:39  epoch/iter: 99/40199  total_loss: 1.815  time: 0.5042  data_time: 0.0009  lr: 3.00e-05  max_mem: 5104M
+[06/17 09:01:30] fastreid.utils.events INFO:  eta: 0:00:00  epoch/iter: 99/40399  total_loss: 1.829  time: 0.5042  data_time: 0.0016  lr: 3.00e-05  max_mem: 5104M
+[06/17 09:01:30] fastreid.engine.defaults INFO: Prepare testing set
+[06/17 09:01:30] fastreid.data.datasets.bases INFO: => Loaded InShop in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| query    | 3985    | 14218      | 1           |
+| gallery  | 3985    | 12612      | 1           |[0m
+[06/17 09:01:30] fastreid.evaluation.evaluator INFO: Start inference on 26830 images
+[06/17 09:01:32] fastreid.evaluation.evaluator INFO: Inference done 11/420. 0.1476 s / batch. ETA=0:01:00
+[06/17 09:02:02] fastreid.evaluation.evaluator INFO: Inference done 210/420. 0.1495 s / batch. ETA=0:00:31
+[06/17 09:02:32] fastreid.evaluation.evaluator INFO: Inference done 411/420. 0.1489 s / batch. ETA=0:00:01
+[06/17 09:02:33] fastreid.evaluation.evaluator INFO: Total inference time: 0:01:02.323473 (0.150177 s / batch per device, on 1 devices)
+[06/17 09:02:33] fastreid.evaluation.evaluator INFO: Total inference pure compute time: 0:01:01 (0.148543 s / batch per device, on 1 devices)
+[06/17 09:02:34] fastreid.engine.defaults INFO: Evaluation results for InShop in csv format:
+[06/17 09:02:34] fastreid.evaluation.testing INFO: Evaluation results in csv format: 
+[36m| Dataset   | Recall@1   | Recall@10   | Recall@20   | Recall@30   | Recall@40   | Recall@50   | metric   |
+|:----------|:-----------|:------------|:------------|:------------|:------------|:------------|:---------|
+| InShop    | 92.64      | 98.45       | 99.04       | 99.19       | 99.29       | 99.40       | 92.64    |[0m
+[06/17 09:02:34] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_inshop/model_best.pth
+[06/17 09:02:36] fastreid.utils.checkpoint INFO: Saving checkpoint to projects/FastRetri/logs/r50-base_inshop/model_final.pth
+[06/17 09:02:36] fastreid.utils.events INFO:  eta: 0:00:00  epoch/iter: 99/40399  total_loss: 1.829  time: 0.5042  data_time: 0.0016  lr: 3.00e-05  max_mem: 5104M
+[06/17 09:02:37] fastreid.engine.hooks INFO: Overall training speed: 40398 iterations in 5:39:30 (0.5042 s / it)
+[06/17 09:02:37] fastreid.engine.hooks INFO: Total training time: 5:44:01 (0:04:30 on hooks)
+[06/23 09:32:25] fastreid INFO: Rank of current process: 0. World size: 1
+[06/23 09:32:26] fastreid INFO: Environment info:
+----------------------  ---------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.7.10 (default, Feb 26 2021, 18:47:35) [GCC 7.3.0]
+numpy                   1.20.1
+fastreid                1.0.0 @./fastreid
+FASTREID_ENV_MODULE     <not set>
+PyTorch                 1.6.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torch
+PyTorch debug build     False
+GPU available           True
+GPU 0                   GeForce GTX 1080 Ti
+CUDA_HOME               /usr/local/cuda
+Pillow                  8.1.2
+torchvision             0.7.0 @/home/yl/anaconda3/envs/py37/lib/python3.7/site-packages/torchvision
+torchvision arch flags  sm_35, sm_50, sm_60, sm_70, sm_75
+cv2                     4.5.1
+----------------------  ---------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2019.0.5 Product Build 20190808 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+[06/23 09:32:26] fastreid INFO: Command line arguments: Namespace(config_file='projects/FastRetri/config/inshop.yml', dist_url='tcp://127.0.0.1:50153', eval_only=False, machine_rank=0, num_gpus=1, num_machines=1, opts=[], resume=False)
+[06/23 09:32:26] fastreid INFO: Contents of args.config_file=projects/FastRetri/config/inshop.yml:
+_BASE_: base-image_retri.yml
+
+INPUT:
+  SIZE_TRAIN: [0,]
+  SIZE_TEST: [0,]
+
+SOLVER:
+  MAX_EPOCH: 100
+
+  BASE_LR: 0.003
+  ETA_MIN_LR: 0.00003
+
+  MOMENTUM: 0.99
+  NESTEROV: True
+
+TEST:
+  RECALLS: [ 1, 10, 20, 30, 40, 50 ]
+
+DATASETS:
+  NAMES: ("InShop",)
+  TESTS: ("InShop",)
+
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_inshop
+[06/23 09:32:26] fastreid INFO: Running with full config:
+CUDNN_BENCHMARK: False
+DATALOADER:
+  NAIVE_WAY: True
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 4
+  PK_SAMPLER: True
+DATASETS:
+  COMBINEALL: False
+  NAMES: ('InShop',)
+  TESTS: ('InShop',)
+INPUT:
+  AUGMIX_PROB: 0.0
+  AUTOAUG_PROB: 0.0
+  CJ:
+    BRIGHTNESS: 0.3
+    CONTRAST: 0.3
+    ENABLED: False
+    HUE: 0.1
+    PROB: 0.5
+    SATURATION: 0.1
+  CROP_SIZE: 224
+  DO_AFFINE: False
+  DO_AUGMIX: False
+  DO_AUTOAUG: False
+  DO_FLIP: True
+  DO_PAD: True
+  FLIP_PROB: 0.5
+  PADDING: 10
+  PADDING_MODE: constant
+  RATIO: (0.75, 1.33333)
+  REA:
+    ENABLED: False
+    PROB: 0.5
+    VALUE: [123.675, 116.28, 103.53]
+  RPT:
+    ENABLED: False
+    PROB: 0.5
+  SCALE: (0.16, 1.0)
+  SIZE_TEST: [0]
+  SIZE_TRAIN: [0]
+KD:
+  MODEL_CONFIG: ['']
+  MODEL_WEIGHTS: ['']
+MODEL:
+  BACKBONE:
+    DEPTH: 50x
+    FEAT_DIM: 2048
+    LAST_STRIDE: 1
+    NAME: build_resnet_backbone
+    NORM: FrozenBN
+    PRETRAIN: True
+    PRETRAIN_PATH: 
+    WITH_IBN: False
+    WITH_NL: False
+    WITH_SE: False
+  DEVICE: cuda
+  FREEZE_LAYERS: ['']
+  HEADS:
+    CLS_LAYER: linear
+    EMBEDDING_DIM: 0
+    MARGIN: 0.15
+    NAME: EmbeddingHead
+    NECK_FEAT: after
+    NORM: syncBN
+    NUM_CLASSES: 0
+    POOL_LAYER: gempool
+    SCALE: 128
+    WITH_BNNECK: True
+  LOSSES:
+    CE:
+      ALPHA: 0.2
+      EPSILON: 0.1
+      SCALE: 1.0
+    CIRCLE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    COSFACE:
+      GAMMA: 128
+      MARGIN: 0.25
+      SCALE: 1.0
+    FL:
+      ALPHA: 0.25
+      GAMMA: 2
+      SCALE: 1.0
+    NAME: ('CrossEntropyLoss',)
+    TRI:
+      HARD_MINING: True
+      MARGIN: 0.3
+      NORM_FEAT: False
+      SCALE: 1.0
+  META_ARCHITECTURE: Baseline
+  PIXEL_MEAN: [123.675, 116.28, 103.53]
+  PIXEL_STD: [58.395, 57.120000000000005, 57.375]
+  QUEUE_SIZE: 8192
+  WEIGHTS: 
+OUTPUT_DIR: projects/FastRetri/logs/r50-base_inshop
+SOLVER:
+  BASE_LR: 0.003
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 50
+  DELAY_EPOCHS: 0
+  ETA_MIN_LR: 3e-05
+  FP16_ENABLED: True
+  FREEZE_FC_ITERS: 0
+  FREEZE_ITERS: 0
+  GAMMA: 0.1
+  HEADS_LR_FACTOR: 1.0
+  IMS_PER_BATCH: 64
+  MAX_EPOCH: 100
+  MOMENTUM: 0.99
+  NESTEROV: True
+  OPT: SGD
+  SCHED: CosineAnnealingLR
+  STEPS: [30, 55]
+  WARMUP_FACTOR: 0.1
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0
+TEST:
+  AQE:
+    ALPHA: 3.0
+    ENABLED: False
+    QE_K: 5
+    QE_TIME: 1
+  EVAL_PERIOD: 25
+  FLIP_ENABLED: False
+  IMS_PER_BATCH: 64
+  METRIC: cosine
+  PRECISE_BN:
+    DATASET: Market1501
+    ENABLED: False
+    NUM_ITER: 300
+  RECALLS: [1, 10, 20, 30, 40, 50]
+  RERANK:
+    ENABLED: False
+    K1: 20
+    K2: 6
+    LAMBDA: 0.3
+  ROC_ENABLED: False
+[06/23 09:32:26] fastreid INFO: Full config saved to /home/E/yanglu/fast-reid-v3.0/projects/FastRetri/logs/r50-base_inshop/config.yaml
+[06/23 09:32:26] fastreid.utils.env INFO: Using a generated random seed 26776543
+[06/23 09:32:26] fastreid.dml_dataset INFO: Prepare training set
+[06/23 09:32:26] fastreid.data.datasets.bases INFO: => Loaded InShop in csv format: 
+[36m| subset   | # ids   | # images   | # cameras   |
+|:---------|:--------|:-----------|:------------|
+| train    | 3997    | 25882      | 1           |[0m
+[06/23 09:32:27] fastreid.engine.defaults INFO: Auto-scaling the num_classes=3997
+[06/23 09:32:27] fastreid.modeling.backbones.resnet INFO: Loading pretrained model from /home/yl/.cache/torch/checkpoints/resnet50-19c8e357.pth
+[06/23 09:32:30] fastreid.modeling.backbones.resnet INFO: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc.{weight, bias}[0m
+[06/23 09:32:35] fastreid.utils.checkpoint INFO: No checkpoint found. Training model from scratch
+[06/23 09:32:35] fastreid.engine.train_loop INFO: Starting training from epoch 0
+[06/23 09:34:23] fastreid.utils.events INFO:  eta: 5:27:45  epoch/iter: 0/199  total_loss: 8.279  time: 0.5366  data_time: 0.0018  lr: 8.37e-04  max_mem: 5102M
+[06/23 09:36:04] fastreid.utils.events INFO:  eta: 5:29:55  epoch/iter: 0/399  total_loss: 7.667  time: 0.5198  data_time: 0.0031  lr: 1.38e-03  max_mem: 5102M
+[06/23 09:36:06] fastreid.utils.events INFO:  eta: 5:30:00  epoch/iter: 0/403  total_loss: 7.603  time: 0.5196  data_time: 0.0031  lr: 1.39e-03  max_mem: 5102M
