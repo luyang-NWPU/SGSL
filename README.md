@@ -1,4 +1,4 @@
-This is the code for paper <Stop-Gradient Softmax Loss for Deep Metric Learning>.
+This is the code for paper [Stop-Gradient Softmax Loss for Deep Metric Learning].
 
 ## Installation
 See [INSTALL.md](INSTALL.md).
